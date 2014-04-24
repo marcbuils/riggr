@@ -131,6 +131,8 @@
             route: route,
             args: args
           };
+          // Expose current route
+          self.current = route;
         }
       }
     }
