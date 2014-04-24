@@ -54,12 +54,13 @@
       ko.applyBindings(controller, el);
       // Process transition-in
       $(this).fadeIn(transition);
+      // Fire load
+      if (load) {
+        controller.load.apply(controller, args);
+      }
+      // Publish onRoute
+      observer.publish('onRoute');
     });
-    if (load) {
-      controller.load.apply(controller, args);
-    }
-    // Publish onRoute
-    observer.publish('onRoute');
     // Set page title
     if (controller.hasOwnProperty('pageTitle')) {
       setTitle(controller.pageTitle);
