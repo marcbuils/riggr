@@ -36,7 +36,7 @@
       parseQuery: function (query) {
         var res = [];
         if (!Array.isArray(query)) {
-          query = [ query ];
+          query = [query];
         }
         query.forEach(function (cond) {
           // Set key
@@ -74,10 +74,6 @@
         // Handle onupgradeneeded
         request.onupgradeneeded = function (e) {
           var db = e.target.result;
-
-          //if (db.objectStoreNames.contains(dbstore)) {
-          //  var storeReq = db.deleteObjectStore(dbstore);
-          //}
 
           // Create store
           db.createObjectStore(dbstore, {
@@ -181,6 +177,7 @@
             if (!result) {
               return;
             }
+
             function evaluate(val1, op, val2) {
               switch (op) {
               case '$gt':
@@ -237,7 +234,8 @@
               results.push(result.value);
             }
             // Move on
-            result.continue();
+            result.
+            continue ();
           };
 
           // Entire transaction complete
