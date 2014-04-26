@@ -1,4 +1,5 @@
-/* global: indexedDB, IDBKeyRange */
+/*jshint browser: true, onevar: false, strict: false, eqeqeq: false */
+/*global IDBKeyRange, define, exports, module */
 // index.js
 // Provides easy interaction with indexedDB
 // ---
@@ -33,32 +34,31 @@
 
       // Parse query to string for evaluation
       parseQuery: function (query) {
-        // Operands
-        var operands = {
-          '$gt': '>',
-          '$lt': '<',
-          '$gte': '>=',
-          '$lte': '<=',
-          '$ne': '!='
-        };
-        // Set key
-        var key = Object.keys(query);
-        // Check for conditional
-        if (typeof query[Object.keys(query)] === 'object') {
-          var condition = Object.keys(query[Object.keys(query)]);
-          return {
-            field: key[0],
-            operand: operands[condition],
-            value: query[key][condition]
-          };
-        } else {
-          // Direct (==) matching
-          return {
-            field: key[0],
-            operand: '==',
-            value: query[key]
-          };
+        var res = [];
+        if (!Array.isArray(query)) {
+          query = [ query ];
         }
+        query.forEach(function (cond) {
+          // Set key
+          var key = Object.keys(cond);
+          // Check for conditional
+          if (typeof cond[key] === 'object') {
+            var condition = Object.keys(cond[key]);
+            res.push({
+              field: key[0],
+              operand: condition[0],
+              value: cond[key][condition]
+            });
+          } else {
+            // Direct (==) matching
+            res.push({
+              field: key[0],
+              operand: '$eq',
+              value: cond[key]
+            });
+          }
+        });
+        return res;
       },
 
       // Check data type
@@ -69,18 +69,18 @@
       // Create indexedDB store
       create: function (cb) {
         var self = this;
-        var request = indexedDB.open(dbstore);
+        var request = window.indexedDB.open(dbstore);
 
         // Handle onupgradeneeded
         request.onupgradeneeded = function (e) {
           var db = e.target.result;
 
-          if (db.objectStoreNames.contains(dbstore)) {
-            var storeReq = db.deleteObjectStore(dbstore);
-          }
+          //if (db.objectStoreNames.contains(dbstore)) {
+          //  var storeReq = db.deleteObjectStore(dbstore);
+          //}
 
           // Create store
-          var store = db.createObjectStore(dbstore, {
+          db.createObjectStore(dbstore, {
             keyPath: '_id',
             autoIncrement: false
           });
@@ -99,36 +99,38 @@
       // Add item to the store
       insert: function (data, cb) {
         var self = this;
-        var request = indexedDB.open(dbstore);
+        var request = window.indexedDB.open(dbstore);
         request.onsuccess = function (e) {
           // Setup trans and store
           var db = e.target.result;
           var trans = db.transaction([dbstore], self.IDBTransactionModes.READ_WRITE);
           var store = trans.objectStore(dbstore);
+          var i, returnQuery;
+
+          function putNext() {
+            if (i < data.length) {
+              // Set _id
+              data[i]._id = new Date().getTime() + i;
+              // Insert, call putNext recursively on success
+              store.put(data[i]).onsuccess = putNext;
+              //console.log('data', data[i]);
+              i++;
+            } else {
+              // Complete
+              self.find(returnQuery, cb);
+            }
+          }
 
           if (self.checkType(data) === 'array') {
             // Insert array of items
-            var i = 0;
-            var returnQuery = {
+            i = 0;
+            returnQuery = {
               '_id': {
                 '$gte': new Date().getTime()
               }
             };
-            putNext();
 
-            function putNext() {
-              if (i < data.length) {
-                // Set _id
-                data[i]._id = new Date().getTime() + i;
-                // Insert, call putNext recursively on success
-                store.put(data[i]).onsuccess = putNext;
-                console.log('data', data[i]);
-                i++;
-              } else {
-                // Complete
-                self.find(returnQuery, cb);
-              }
-            }
+            putNext();
 
           } else {
             // Insert single item
@@ -157,7 +159,7 @@
       // Traverse data
       traverse: function (query, data, cb) {
         var self = this;
-        var request = indexedDB.open(dbstore);
+        var request = window.indexedDB.open(dbstore);
 
         request.onsuccess = function (e) {
 
@@ -171,22 +173,43 @@
           var results = [];
 
           cursorRequest.onsuccess = function (e) {
+            //jshint maxstatements: 24, maxcomplexity: 12
             var result = e.target.result;
+            var prop;
 
             // Stop on no result
-            if ( !! result === false) {
+            if (!result) {
               return;
+            }
+            function evaluate(val1, op, val2) {
+              switch (op) {
+              case '$gt':
+                return val1 > val2;
+              case '$lt':
+                return val1 < val2;
+              case '$gte':
+                return val1 >= val2;
+              case '$lte':
+                return val1 != val2;
+              case '$ne':
+                return val1 != val2;
+              case '$eq':
+                return val1 == val2;
+              case '$like':
+                return new RegExp(val2, 'i').test(val1);
+              }
             }
             // Test query
             if (query) {
-              var match = result.value[query.field];
-              var value = query.value;
-              var test = 'match' + query.operand + 'value';
+              var match = true;
+              query.forEach(function (cond) {
+                match = match && evaluate(result.value[cond.field], cond.operand, cond.value);
+              });
               // Evaluate test condition
-              if (eval(test)) {
+              if (match) {
                 // Check if update
                 if (self.checkType(data) === 'object') {
-                  for (var prop in data) {
+                  for (prop in data) {
                     result.value[prop] = data[prop];
                   }
                   result.update(result.value);
@@ -214,8 +237,7 @@
               results.push(result.value);
             }
             // Move on
-            result.
-            continue ();
+            result.continue();
           };
 
           // Entire transaction complete
@@ -292,7 +314,7 @@
       // Drop data store
       drop: function (cb) {
         var self = this;
-        var deleteRequest = indexedDB.deleteDatabase(dbstore);
+        var deleteRequest = window.indexedDB.deleteDatabase(dbstore);
         // Golden
         deleteRequest.onsuccess = function (e) {
           self.processCB(cb, true);
