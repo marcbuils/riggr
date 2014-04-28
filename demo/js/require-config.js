@@ -9,6 +9,7 @@ requirejs.config({
     'observer': '../../src/observer',
     'request': '../../src/request',
     'store': '../../src/store',
-    'indexed': '../../src/indexed'
+    'indexed': '../../src/indexed',
+    'validation': '../../src/validation'
   }
 });

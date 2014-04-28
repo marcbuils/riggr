@@ -1,2 +1,0 @@
-/* Part of the Riggr SPA framework <https://github.com/Fluidbyte/Riggr> and released under the MIT license. This notice must remain intact. */
-!function(a,b){"function"==typeof define&&define.amd?define([],b):"object"==typeof exports?module.exports=b():a.validate=b()}(this,function(){var a={custom:{},add:function(){},check:function(){}};return a});

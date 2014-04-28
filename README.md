@@ -342,7 +342,7 @@ Records automatically receive an `_id` property as their UID, so the output woul
 {
     '_id': 928376488383,
     'name': 'John Doe',
-    'email': 'jdoe@email.com
+    'email': 'jdoe@email.com'
 }
 ```
 
@@ -383,8 +383,8 @@ The above would return all results from the datastore.
 To query specific records the `find()` method supports object-based queries:
 
 ```javascript
-indexed('myDB').find({ 
-    _id: 28972387982 
+indexed('myDB').find({
+    _id: 28972387982
 }, function (err, data) {
     if (err) {
         console.log('Nope.');
@@ -451,6 +451,74 @@ indexed('myDB').drop();
 ```
 
 The above would remove the datastore from IndexedDB storage.
+
+### Validation
+
+The `{riggr-path}/validation.js` file provides RegEx and Type validation. Controllers
+using this must explicitly pass it in using `define`, then can access the methods
+provided:
+
+#### Type Checks
+
+The `validation` lib has `toString.call()` based type checking:
+
+```javascript
+validation.typeOf('something');
+```
+
+The above would return `string`, other types returned are `undefined`, `null`,
+`number`, `boolean`, `array`, and `object`.
+
+#### Object Validation
+
+The `validation` lib has a built-in set of RegEx's which can be overwritten or
+added to. For example, a test could be added via:
+
+```javascript
+validation.add('ssn', /^([0-9]{3}[-]*[0-9]{2}[-]*[0-9]{4})+$/);
+```
+
+The above would add the regex and then be usable throughout the application.
+
+To check a value or values an object with `test: value` formatting can be passed
+to the `test()` method, for example:
+
+```javascript
+validation.test({
+  email: 'jon@email.com'
+});
+```
+
+Additionally, this can be done across multiple objects:
+
+```javascript
+validation.test({
+  string: 'Jon Doe',
+  email: 'jon@email.com',
+  ssn: '123-45-6789'
+});
+```
+
+Since the above contains all passing values the return of this test would be `true`.
+
+In the case of a failure the original object is returned with only the failing 
+tests included. For example:
+
+```javascript
+validation.test({
+  string: 'Jon Doe',
+  email: 'jonemailcom', // Not going to pass
+  ssn: '123-45-6789'
+});
+```
+
+The above would return:
+
+```javascript
+{
+  email: 'jonemailcom'
+}
+```
 
 ## License
 
