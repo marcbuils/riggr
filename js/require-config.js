@@ -4,7 +4,7 @@ requirejs.config({
     'text': '../vendor/riggr/dist/lib/requirejs-text/text',
     'knockout': '../vendor/riggr/dist/lib/knockout/index',
     'jquery': '../vendor/riggr/dist/lib/jquery/dist/jquery',
-    'riggr': '../vendor/riggr/dist/riggr',
+    'riggr': '../vendor/riggr/src/riggr',
     'router': '../vendor/riggr/dist/router',
     'observer': '../vendor/riggr/dist/observer',
     'request': '../vendor/riggr/dist/request',
