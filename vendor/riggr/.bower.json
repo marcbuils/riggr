@@ -23,6 +23,18 @@
     "tests"
   ],
   "devDependencies": {
-    "riggr": "0.8.0"
-  }
+    "requirejs": "2.1.0",
+    "requirejs-text": "2.0.12",
+    "knockout": "http://knockoutjs.com/downloads/knockout-3.1.0.js",
+    "jquery": "2.1.0"
+  },
+  "_release": "0.8.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.8.0",
+    "commit": "6ea2b1685ef692977ad68d67ea6042db41f2a67b"
+  },
+  "_source": "git://github.com/Fluidbyte/Riggr.git",
+  "_target": "0.8.0",
+  "_originalSource": "riggr"
 }
