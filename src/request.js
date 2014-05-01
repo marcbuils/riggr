@@ -20,21 +20,23 @@
 
     // Make request
     send: function (req, opts) {
-      var reqObj;
+      var reqObj = {};
       var checkType = function (obj) {
         return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
       };
 
       // Determine type of call (stored or direct)
-      if (checkType(req) === 'string') {
+      if (checkType(req) === 'string' && this.stored.hasOwnProperty(req)) {
         // Get from storage
-        reqObj = this.stored[req];
+        for (var storedItem in this.stored[req]) {
+          reqObj[storedItem] = this.stored[req][storedItem];
+        }
         // Overwrite any stored opts
         if (opts && checkType(opts) === 'object') {
           for (var opt in opts) {
             // Only includes standars opts, not proprietary url_params
             if (opt !== 'url_params') {
-              this.stored[req][opt] = opts[opt];
+              reqObj[opt] = opts[opt];
             }
           }
         }
