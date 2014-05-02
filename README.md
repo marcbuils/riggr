@@ -3,6 +3,18 @@
 Set of utils for building web app's using [RequireJS](http://requirejs.org/),
 [Knockout](http://knockoutjs.com/) and [jQuery](http://www.jquery.com).
 
+## Contents
+
+* [Usage / Getting Started](#usage)
+* [Containers and Regions](#containers)
+* [Routing](#routing)
+* [KnockoutJS and Binding](#knockout--binding)
+* [Observer Patterns](#observer)
+* [Requests and Stored XHR](#requests)
+* [Store - localStorage](#store)
+* [IndexedDB](#indexed)
+* [Validation](#validation)
+
 ## Usage
 
 Riggr can be easily installed via `bower install riggr`. The bower package
@@ -396,7 +408,7 @@ indexed('myDB').find({
 
 The above would return the record matching the `_id`.
 
-Additionally, comparison queries can be made as objects with `$gt` (greater than), `$lt` (less than), `$gte` (greater than or equal), `$lte` (less than or equal), and `$ne` (not equal). For example:
+Additionally, comparison queries can be made as objects with `$gt` (greater than), `$lt` (less than), `$gte` (greater than or equal), `$lte` (less than or equal), `$like`, and `$ne` (not equal). For example:
 
 ```javascript
 indexed('myDB').find({
