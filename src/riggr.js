@@ -1,4 +1,4 @@
-// composer.js
+// riggr.js
 // Builds core application methods, binds routes, and loads init from app.js
 // ---
 // Part of the Riggr SPA framework <https://github.com/Fluidbyte/Riggr> and released
