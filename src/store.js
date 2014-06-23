@@ -21,33 +21,37 @@
     },
 
     // Set item
-    set: function (name, data) {
+    set: function (name, data, session) {
       // Check if object
       if (this.checkType(data) === 'object' || this.checkType(data) === 'array') {
         // Stringify contents
         data = JSON.stringify(data);
       }
       // Set in lS
-      localStorage.setItem(name, data);
+      this.getStorage(session).setItem(name, data);
     },
 
     // Get (and parse) item
-    get: function (name) {
+    get: function (name, session) {
       var data;
       try {
         // If this is JSON, parse it
-        data = JSON.parse(localStorage.getItem(name));
+        data = JSON.parse(this.getStorage(session).getItem(name));
       } catch (e) {
         // Just send back the string
-        data = localStorage.getItem(name);
+        data = this.getStorage(session).getItem(name);
       }
       // Send it back
       return data;
     },
 
     // Remove item
-    remove: function (name) {
-      localStorage.removeItem(name);
+    remove: function (name, session) {
+      this.getStorage(session).removeItem(name);
+    },
+    
+    getStorage: function (session) {
+      return (session) ? sessionStorage : localStorage;
     }
 
   };
