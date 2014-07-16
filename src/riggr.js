@@ -127,7 +127,9 @@
       ko.applyBindings(app);
       // Listen for route change
       observer.subscribe('onRoute', function () {
-        app.onRoute.apply(app);
+        if (app.hasOwnProperty('onRoute')) {
+          app.onRoute.apply(app);
+        }
       });
       // Check for 'load'
       if (app.hasOwnProperty('load')) {

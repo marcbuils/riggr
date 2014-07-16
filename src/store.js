@@ -49,7 +49,7 @@
     remove: function (name, session) {
       this.getStorage(session).removeItem(name);
     },
-    
+
     getStorage: function (session) {
       return (session) ? sessionStorage : localStorage;
     }
