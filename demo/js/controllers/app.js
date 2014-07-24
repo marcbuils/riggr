@@ -21,6 +21,11 @@ define([
     load: function () {
       console.log('APP LOADED');
     },
+    
+    // Before any routes are loaded/processed
+    beforeRoute: function (fn) {
+      fn(true);
+    },
 
     // On route loaded/changed
     onRoute: function () {

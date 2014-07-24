@@ -25,6 +25,7 @@
   };
   var appContainer = 'appContainer';
   var viewContainer = 'viewContainer';
+  var beforeRoute = false;
 
   // Sets title
   var setTitle = function (pageTitle) {
@@ -77,6 +78,11 @@
       controllers.push(controller);
 
       var routeHandler = {};
+
+      // Check for (and add) app-level beforeRoute
+      if (beforeRoute) {
+        routeHandler.beforeAppRoute = beforeRoute;
+      }
 
       // Create before handler
       if (controller.hasOwnProperty('before')) {
@@ -157,6 +163,11 @@
     // Check for paths overrides
     if (app.hasOwnProperty('paths')) {
       paths = app.paths;
+    }
+
+    // Check for app-level beforeRoute
+    if (app.hasOwnProperty('beforeRoute')) {
+      beforeRoute = app.beforeRoute;
     }
 
     // Set title

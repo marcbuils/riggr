@@ -50,6 +50,42 @@
     route = match.route;
     args = match.args;
 
+    var processControllerRouting = function () {
+
+      // Check and run 'before'
+      if (routeObj.hasOwnProperty('before') && typeof routeObj.before === 'function') {
+        // Should fire callback with arg 'res' = true/false
+        routeObj.before(function (res) {
+          if (res && routeObj.load) {
+            routeObj.load.apply(this, args);
+            self.history.push({
+              matcher: route,
+              fragment: fragment
+            });
+          } else {
+            self.go(self.history[self.history.length - 1].fragment);
+          }
+        });
+      } else {
+        // No 'before', just load...
+        routeObj.load.apply(this, args);
+        self.history.push({
+          matcher: route,
+          fragment: fragment
+        });
+      }
+
+      // Check and run 'load' if fn exists and before has passed
+      if (routeObj.load && !routeObj.hasOwnProperty('before')) {
+        routeObj.load.apply(this, args);
+        self.history.push({
+          matcher: route,
+          fragment: fragment
+        });
+      }
+
+    };
+
     // Get prev_route
     if (self.history.length !== 0) {
       prevRoute = self.routes[self.history[self.history.length - 1].matcher];
@@ -62,35 +98,12 @@
       prevRoute.unload.apply(this);
     }
 
-    // Check and run 'before'
-    if (routeObj.hasOwnProperty('before') && typeof routeObj.before === 'function') {
-      // Should fire callback with arg 'res' = true/false
-      routeObj.before(function (res) {
-        if (res && routeObj.load) {
-          routeObj.load.apply(this, args);
-          self.history.push({
-            matcher: route,
-            fragment: fragment
-          });
-        } else {
-          self.go(self.history[self.history.length - 1].fragment);
+    // Check for beforeAppRoute
+    if (routeObj.hasOwnProperty('beforeAppRoute') && typeof routeObj.beforeAppRoute === 'function') {
+      routeObj.beforeAppRoute(function (res) {
+        if (res) {
+          processControllerRouting();
         }
-      });
-    } else {
-      // No 'before', just load...
-      routeObj.load.apply(this, args);
-      self.history.push({
-        matcher: route,
-        fragment: fragment
-      });
-    }
-
-    // Check and run 'load' if fn exists and before has passed
-    if (routeObj.load && !routeObj.hasOwnProperty('before')) {
-      routeObj.load.apply(this, args);
-      self.history.push({
-        matcher: route,
-        fragment: fragment
       });
     }
 
@@ -167,6 +180,7 @@
       this.routes[route].unload = false;
     } else if (handler && typeof handler === 'object') {
       // Passed an object
+      this.routes[route].beforeAppRoute = (handler.beforeAppRoute) ? handler.beforeAppRoute : false;
       this.routes[route].before = (handler.before) ? handler.before : false;
       this.routes[route].load = (handler.load) ? handler.load : false;
       this.routes[route].unload = (handler.unload) ? handler.unload : false;
