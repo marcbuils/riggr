@@ -167,7 +167,7 @@
 
     // Check for app-level beforeRoute
     if (app.hasOwnProperty('beforeRoute')) {
-      beforeRoute = app.beforeRoute;
+      beforeRoute = app.beforeRoute.bind(app);
     }
 
     // Set title
