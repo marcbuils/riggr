@@ -1,3 +1,4 @@
+/*jshint newcap: false */
 // request.js
 // Provides centralized control for async/xhr requests
 // ---
@@ -12,13 +13,13 @@
     root.request = factory(root.$);
   }
 }(this, function ($) {
-  
+
   // Class constructor
-  var request = function() {
+  var request = function () {
     // Storage for saved requests
     this.stored = {};
   };
-  
+
   // Request method
   request.prototype.send = function (req, opts) {
     var reqObj = {};
@@ -54,19 +55,19 @@
     // Make (and return) AJAX request
     return $.ajax(reqObj);
   };
-  
+
   // Process URL parameters
   request.prototype.processURLParams = function (url, params) {
     return url.replace(/\{([^}]+)\}/g, function (i, match) {
       return params[match];
     });
   };
-  
+
   // Create stored request
   request.prototype.create = function (name, opts) {
     this.stored[name] = opts;
   };
-  
+
   // Remove stored request
   request.prototype.remove = function (name) {
     delete this.stored[name];

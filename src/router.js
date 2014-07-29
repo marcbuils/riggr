@@ -105,6 +105,8 @@
           processControllerRouting();
         }
       });
+    } else {
+      processControllerRouting();
     }
 
   };
