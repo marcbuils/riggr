@@ -10,6 +10,7 @@ requirejs.config({
     'request': '../../src/request',
     'store': '../../src/store',
     'indexed': '../../src/indexed',
-    'validation': '../../src/validation'
+    'validation': '../../src/validation',
+    'date': '../../src/date'
   }
 });
