@@ -538,7 +538,7 @@ The above would return:
 ### Dates
 
 Since timestamps and date formats are common across almost all front-end applications 
-riggr includes a `{riggr-path}/validation.js` utility which allows simple formating 
+riggr includes a `{riggr-path}/date.js` utility which allows simple formating 
 of timestamps:
 
 ```javascript
