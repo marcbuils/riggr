@@ -235,7 +235,7 @@
             }
             // Move on
             result.
-            continue ();
+            continue();
           };
 
           // Entire transaction complete

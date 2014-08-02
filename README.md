@@ -1,3 +1,5 @@
+![Codeship Status for telepharm/riggr](https://codeship.io/projects/d2a2ec00-fca2-0131-49be-6e5f7dbab667/status)]
+
 # Riggr
 
 Set of utils for building web app's using [RequireJS](http://requirejs.org/),
