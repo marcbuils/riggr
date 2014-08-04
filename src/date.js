@@ -1,4 +1,4 @@
-// Formats dates to the desired format
+// Format dates using the desired patterns
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     define(['jquery'], factory);
@@ -13,55 +13,55 @@
     /**
      * List of supported characters
      *
-     * d    | Day of the month as digits; no leading zero for single-digit days
+     * d    | Day of the month, 1 digit
      * -------------------------------------------------------------------------
-     * dd   | Day of the month as digits; leading zero for single-digit days
+     * dd   | Day of the month, 2 digits with leading zeros
      * -------------------------------------------------------------------------
-     * ddd  | Day of the week as a three-letter abbreviation
+     * D    | A textual representation of a day, three letters
      * -------------------------------------------------------------------------
-     * dddd | Day of the week as its full name
+     * DD   | A full textual representation of the day of the week
      * -------------------------------------------------------------------------
-     * m    | Month as digits; no leading zero for single-digit months
+     * m    | Month as single digit
      * -------------------------------------------------------------------------
-     * mm   | Month as digits; leading zero for single-digit months
+     * mm   | Month as 2 digits with leading zeros
      * -------------------------------------------------------------------------
-     * mmm  | Month as a three-letter abbreviation
+     * M    | A textual representation of the month
      * -------------------------------------------------------------------------
-     * mmmm | Month as its full name
+     * MM   | A full textual representation of the month
      * -------------------------------------------------------------------------
-     * yy   | Year as last two digits; leading zero for years less than 10
+     * yy   | Year as last two digits; leading zero where necessary
      * -------------------------------------------------------------------------
      * yyyy | Year represented by four digits
      * -------------------------------------------------------------------------
-     * h    | Hours; no leading zero for single-digit hours (12-hour clock)
+     * h    | Hours, no leading zero where necessary (12 Hour)
      * -------------------------------------------------------------------------
-     * hh   | Hours; leading zero for single-digit hours (12-hour clock)
+     * hh   | Hours with leading zero (12 Hour)
      * -------------------------------------------------------------------------
-     * H    | Hours; no leading zero for single-digit hours (24-hour clock)
+     * H    | Hours, no leading zero where necessary (24 Hour)
      * -------------------------------------------------------------------------
-     * HH   | Hours; leading zero for single-digit hours (24-hour clock)
+     * HH   | Hours with leading zero (24 Hour)
      * -------------------------------------------------------------------------
-     * M    | Minutes; no leading zero for single-digit minutes
+     * i    | Minutes with no leading zero
      * -------------------------------------------------------------------------
-     * MM   | Minutes; leading zero for single-digit minutes
+     * ii    | Minutes with leading zero
      * -------------------------------------------------------------------------
-     * s    | Seconds; no leading zero for single-digit seconds
+     * s    | Seconds with no leading zero
      * -------------------------------------------------------------------------
-     * ss   | Seconds; leading zero for single-digit seconds
+     * ss   | Seconds with leading zero
      * -------------------------------------------------------------------------
-     * l    | Milliseconds; three digits
+     * l    | Milliseconds as three digits
      * -------------------------------------------------------------------------
-     * L    | Milliseconds; two digits
+     * L    | Milliseconds as two digits
      * -------------------------------------------------------------------------
-     * t    | Lowercase, single-character time marker string: a or p
+     * a    | Lowercase single character Ante meridiem and Post meridiem (a or p)
      * -------------------------------------------------------------------------
-     * tt   | Lowercase, two-character time marker string: am or pm
+     * aa   | Lowercase two character Ante meridiem and Post meridiem (am or pm)
      * -------------------------------------------------------------------------
-     * T    | Uppercase, single-character time marker string: A or P
+     * A    | Uppercase single character Ante meridiem and Post meridiem (A or P)
      * -------------------------------------------------------------------------
-     * TT   | Uppercase, two-character time marker string: AM or PM
+     * AA   | Uppercase two character Ante meridiem and Post meridiem (AM or PM)
      * -------------------------------------------------------------------------
-     * Z    | US timezone abbreviation, e.g. EST or CST
+     * e    | US timezone abbreviation, e.g. EST or CST
      * -------------------------------------------------------------------------
      * o    | GMT/UTC timezone offset, e.g. -0400 or +0430
      * -------------------------------------------------------------------------
@@ -74,44 +74,63 @@
      */
 
     /**
-     * Array of allowed patterns presets
+     * Array of allowed presets
      */
-    patterns: {
-      'default': 'ddd mmm dd yyyy HH:MM:ss',
+    presets: {
+      'default': 'D M dd yyyy HH:ii:ss',
       shortDate: 'm/d/yy',
-      mediumDate: 'mmm d, yyyy',
-      longDate: 'mmmm d, yyyy',
-      fullDate: 'dddd, mmmm d, yyyy',
-      shortTime: 'h:MM TT',
-      mediumTime: 'h:MM:ss TT',
-      longTime: 'h:MM:ss TT Z',
+      mediumDate: 'M d, yyyy',
+      longDate: 'MM d, yyyy',
+      fullDate: 'DD, MM d, yyyy',
+      shortTime: 'h:ii AA',
+      mediumTime: 'h:ii:ss AA',
+      longTime: 'h:ii:ss AA e',
       isoDate: 'yyyy-mm-dd',
-      isoTime: 'HH:MM:ss',
-      isoDateTime: 'yyyy-mm-dd\'T\'HH:MM:ss',
-      isoUtcDateTime: 'UTC:yyyy-mm-dd\'T\'HH:MM:ss\'Z\''
+      isoTime: 'HH:ii:ss',
+      isoDateTime: 'yyyy-mm-dd\'A\'HH:ii:ss',
+      isoUtcDateTime: 'UTC:yyyy-mm-dd\'A\'HH:ii:ss\'e\''
     },
 
     /**
      * Put day / month names in i18n object; can be hooked to i18n class later
      */
     i18n: {
-      dayNames: [
-        'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
+      days: [
+        'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'
+      ],
+      daysFull: [
         'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
       ],
-      monthNames: [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      months: [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ],
+      monthsFull: [
         'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
       ]
     },
+    
+    /**
+     * Adds leading zeros to a string
+     * @param val {String} The value to pad
+     * @param len {Integer} The string length with zeros (e.g. 2 will pad a single digit with one zero)
+     */
+    pad: function (val, len) {
+      val = String(val);
+      len = len || 2;
+      while (val.length < len) {
+        val = '0' + val;
+      }
+      return val;
+    },
 
     /**
-     * Formats a date based on the specific pattern
+     * Formats a date based on the specific preset
      * @param date {Date|String} The date to format
-     * @param pattern {String} The specific pattern to utilize
+     * @param preset {String} The specific preset to utilize
+     * @param utc {Boolean} True to utilize UTC dates
      * @return
      */
-    format: function (date, pattern, utc) {
+    format: function (date, preset, utc) {
       var self = this;
 
       // Define regex values
@@ -121,82 +140,72 @@
         '(?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\\d{4})?)\\b/g';
       timezone = new RegExp(timezone);
 
-      // Used to pad date values
-      var pad = function (val, len) {
-        val = String(val);
-        len = len || 2;
-        while (val.length < len) {
-          val = '0' + val;
-        }
-        return val;
-      };
-
       // Check arguments for any skipped
       if (arguments.length === 1 && Object.prototype.toString.call(date) === '[object String]' && !/\d/.test(date)) {
-        pattern = date;
+        preset = date;
         date = undefined;
       }
 
       // Passing date through Date applies Date.parse, if necessary
-      date = date ? new Date(date) : new Date();
+      date = (date) ? new Date(date) : new Date();
       if (isNaN(date)) {
         throw new SyntaxError('Invalid Date');
       }
 
-      pattern = String(this.patterns[pattern] || pattern || this.patterns['default']);
+      preset = String(this.presets[preset] || preset || this.presets['default']);
 
-      // Allow setting the utc argument via the pattern
-      if (pattern.slice(0, 4) === 'UTC:') {
-        pattern = pattern.slice(4);
+      // Allow setting the utc argument via the preset
+      if (preset.slice(0, 4) === 'UTC:') {
+        preset = preset.slice(4);
         utc = true;
       }
 
       // Define various format properties
-      var _ = utc ? 'getUTC' : 'get';
-      var d = date[_ + 'Date']();
-      var D = date[_ + 'Day']();
-      var m = date[_ + 'Month']();
-      var y = date[_ + 'FullYear']();
-      var H = date[_ + 'Hours']();
-      var M = date[_ + 'Minutes']();
-      var s = date[_ + 'Seconds']();
-      var L = date[_ + 'Milliseconds']();
-      var o = utc ? 0 : date.getTimezoneOffset();
+      var _ = (utc) ? 'getUTC' : 'get';
+      var nDate = date[_ + 'Date']();
+      var Day = date[_ + 'Day']();
+      var Month = date[_ + 'Month']();
+      var Year = date[_ + 'FullYear']();
+      var Hours = date[_ + 'Hours']();
+      var Minutes = date[_ + 'Minutes']();
+      var Seconds = date[_ + 'Seconds']();
+      var Milliseconds = date[_ + 'Milliseconds']();
+      var Offset = (utc) ? 0 : date.getTimezoneOffset();
 
-      // Pattern flags
-      var flags = {
-        d: d,
-        dd: pad(d),
-        ddd: self.i18n.dayNames[D],
-        dddd: self.i18n.dayNames[D + 7],
-        m: m + 1,
-        mm: pad(m + 1),
-        mmm: self.i18n.monthNames[m],
-        mmmm: self.i18n.monthNames[m + 12],
-        yy: String(y).slice(2),
-        yyyy: y,
-        h: H % 12 || 12,
-        hh: pad(H % 12 || 12),
-        H: H,
-        HH: pad(H),
-        M: M,
-        MM: pad(M),
-        s: s,
-        ss: pad(s),
-        l: pad(L, 3),
-        L: pad(L > 99 ? Math.round(L / 10) : L),
-        t: H < 12 ? 'a' : 'p',
-        tt: H < 12 ? 'am' : 'pm',
-        T: H < 12 ? 'A' : 'P',
-        TT: H < 12 ? 'AM' : 'PM',
-        Z: utc ? 'UTC' : (String(date).match(timezone) || ['']).pop().replace(timezoneClip, ''),
-        o: (o > 0 ? '-' : '+') + pad(Math.floor(Math.abs(o) / 60) * 100 + Math.abs(o) % 60, 4),
-        S: ['th', 'st', 'nd', 'rd'][d % 10 > 3 ? 0 : (d % 100 - d % 10 !== 10) * d % 10]
+      // Patterns to match from
+      var patterns = {
+        d: nDate,
+        dd: self.pad(nDate),
+        D: self.i18n.days[Day],
+        DD: self.i18n.daysFull[Day],
+        m: Month + 1,
+        mm: self.pad(Month + 1),
+        M: self.i18n.months[Month],
+        MM: self.i18n.monthsFull[Month],
+        yy: String(Year).slice(2),
+        yyyy: Year,
+        h: Hours % 12 || 12,
+        hh: self.pad(Hours % 12 || 12),
+        H: Hours,
+        HH: self.pad(Hours),
+        i: Minutes,
+        ii: self.pad(Minutes),
+        s: Seconds,
+        ss: self.pad(Seconds),
+        l: self.pad(Milliseconds, 3),
+        L: self.pad((Milliseconds > 99) ? Math.round(Milliseconds / 10) : Milliseconds),
+        a: Hours < 12 ? 'a' : 'p',
+        aa: Hours < 12 ? 'am' : 'pm',
+        A: Hours < 12 ? 'A' : 'P',
+        AA: Hours < 12 ? 'AM' : 'PM',
+        e: utc ? 'UTC' : (String(date).match(timezone) || ['']).pop().replace(timezoneClip, ''),
+        o: (Offset > 0 ? '-' : '+') + self.pad(Math.floor(Math.abs(Offset) / 60) * 100 + Math.abs(Offset) % 60, 4),
+        S: ['th', 'st', 'nd', 'rd'][nDate % 10 > 3 ? 0 : (nDate % 100 - nDate % 10 !== 10) * nDate % 10]
       };
 
       // Get and send the new date value back
-      return pattern.replace(token, function ($0) {
-        return $0 in flags ? flags[$0] : $0.slice(1, $0.length - 1);
+      return preset.replace(token, function (output) {
+        return (output in patterns) ? patterns[output] : output.slice(1, output.length - 1);
       });
     }
   };
