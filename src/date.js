@@ -134,7 +134,7 @@
       var self = this;
 
       // Define regex values
-      var token = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g;
+      var token = /d{1,2}|D{1,2}|m{1,2}|M{1,2}|yy(?:yy)?|([HhisAa])\1?|[LloSe]|"[^"]*"|'[^']*'/g;
       var timezoneClip = /[^-+\dA-Z]/g;
       var timezone = '/\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) ' +
         '(?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\\d{4})?)\\b/g';
