@@ -108,7 +108,7 @@
         'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
       ]
     },
-    
+
     /**
      * Adds leading zeros to a string
      * @param val {String} The value to pad
