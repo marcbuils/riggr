@@ -16,6 +16,7 @@ Set of utils for building web app's using [RequireJS](http://requirejs.org/),
 * [Store - localStorage](#store)
 * [IndexedDB](#indexed)
 * [Validation](#validation)
+* [Dates](#dates)
 
 ## Usage
 
@@ -531,6 +532,36 @@ The above would return:
 ```javascript
 {
   email: 'jonemailcom'
+}
+```
+
+### Dates
+
+Since timestamps and date formats are common across almost all front-end applications 
+riggr includes a `{riggr-path}/date.js` utility which allows simple formating 
+of timestamps:
+
+```javascript
+// Example: August 1, 2014 6:22:34 PM
+date.format(new Date(), 'mmmm d, yyyy h:MM:ss TT');
+```
+
+Beyond custom formatting, the util provides pattern presets:
+
+```javascript
+patterns: {
+  'default': 'ddd mmm dd yyyy HH:MM:ss',
+  shortDate: 'm/d/yy',
+  mediumDate: 'mmm d, yyyy',
+  longDate: 'mmmm d, yyyy',
+  fullDate: 'dddd, mmmm d, yyyy',
+  shortTime: 'h:MM TT',
+  mediumTime: 'h:MM:ss TT',
+  longTime: 'h:MM:ss TT Z',
+  isoDate: 'yyyy-mm-dd',
+  isoTime: 'HH:MM:ss',
+  isoDateTime: 'yyyy-mm-dd\'T\'HH:MM:ss',
+  isoUtcDateTime: 'UTC:yyyy-mm-dd\'T\'HH:MM:ss\'Z\''
 }
 ```
 
