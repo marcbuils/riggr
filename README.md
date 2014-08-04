@@ -543,25 +543,25 @@ of timestamps:
 
 ```javascript
 // Example: August 1, 2014 6:22:34 PM
-date.format(new Date(), 'mmmm d, yyyy h:MM:ss TT');
+date.format(new Date(), 'MM d, yyyy h:ii:ss AA');
 ```
 
 Beyond custom formatting, the util provides pattern presets:
 
 ```javascript
-patterns: {
-  'default': 'ddd mmm dd yyyy HH:MM:ss',
+presets: {
+  'default': 'D M dd yyyy HH:ii:ss',
   shortDate: 'm/d/yy',
-  mediumDate: 'mmm d, yyyy',
-  longDate: 'mmmm d, yyyy',
-  fullDate: 'dddd, mmmm d, yyyy',
-  shortTime: 'h:MM TT',
-  mediumTime: 'h:MM:ss TT',
-  longTime: 'h:MM:ss TT Z',
+  mediumDate: 'M d, yyyy',
+  longDate: 'MM d, yyyy',
+  fullDate: 'DD, MM d, yyyy',
+  shortTime: 'h:ii AA',
+  mediumTime: 'h:ii:ss AA',
+  longTime: 'h:ii:ss AA e',
   isoDate: 'yyyy-mm-dd',
-  isoTime: 'HH:MM:ss',
-  isoDateTime: 'yyyy-mm-dd\'T\'HH:MM:ss',
-  isoUtcDateTime: 'UTC:yyyy-mm-dd\'T\'HH:MM:ss\'Z\''
+  isoTime: 'HH:ii:ss',
+  isoDateTime: 'yyyy-mm-dd\'A\'HH:ii:ss',
+  isoUtcDateTime: 'UTC:yyyy-mm-dd\'A\'HH:ii:ss\'e\''
 }
 ```
 
