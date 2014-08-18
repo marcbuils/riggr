@@ -145,7 +145,7 @@
         preset = date;
         date = undefined;
       }
-      
+
       // JavaScript's date method cannot process PM in the string, so we'll cleanse both ante and post
       if (isNaN(date)) {
         date = date.replace(/AM|am|PM|pm/gi, '');
