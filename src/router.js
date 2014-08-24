@@ -63,7 +63,9 @@
               fragment: fragment
             });
           } else {
-            self.go(self.history[self.history.length - 1].fragment);
+            if (self.history && self.history.length) {
+              self.go(self.history[self.history.length - 1].fragment);
+            }
           }
         });
       } else {
