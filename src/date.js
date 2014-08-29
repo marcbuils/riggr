@@ -213,40 +213,40 @@
         return (output in patterns) ? patterns[output] : output.slice(1, output.length - 1);
       });
     },
-    
+
     /**
      * Returns the elapsed time from an existing timestamp
      * @param timestamp {Integer} The timestamp to measure against
      * @return The elapsed time
      */
-    elapsedTime: function(timestamp) {
+    elapsedTime: function (timestamp) {
       var tMinute = 60 * 1000;
       var tHour = tMinute * 60;
       var tDay = tHour * 24;
       var tMonth = tDay * 30;
       var tYear = tDay * 365;
       var text;
-  
+
       var elapsed = new Date().getTime() - timestamp;
-  
+
       if (elapsed < tMinute) {
-        text = (Math.round(elapsed/1000) === 1) ? 'second' : 'seconds';
-        return Math.round(elapsed/1000) + ' ' + text;
+        text = (Math.round(elapsed / 1000) === 1) ? 'second' : 'seconds';
+        return Math.round(elapsed / 1000) + ' ' + text;
       } else if (elapsed < tHour) {
-        text = (Math.round(elapsed/tMinute) === 1) ? 'minute' : 'minutes';
-        return Math.round(elapsed/tMinute) + ' ' + text;
-      } else if (elapsed < tDay ) {
-        text = (Math.round(elapsed/tHour) === 1) ? 'hour' : 'hours';
-        return Math.round(elapsed/tHour) + ' ' + text;
+        text = (Math.round(elapsed / tMinute) === 1) ? 'minute' : 'minutes';
+        return Math.round(elapsed / tMinute) + ' ' + text;
+      } else if (elapsed < tDay) {
+        text = (Math.round(elapsed / tHour) === 1) ? 'hour' : 'hours';
+        return Math.round(elapsed / tHour) + ' ' + text;
       } else if (elapsed < tMonth) {
-        text = (Math.round(elapsed/tDay) === 1) ? 'day' : 'days';
-        return 'approximately ' + Math.round(elapsed/tDay) + ' ' + text;
+        text = (Math.round(elapsed / tDay) === 1) ? 'day' : 'days';
+        return 'approximately ' + Math.round(elapsed / tDay) + ' ' + text;
       } else if (elapsed < tYear) {
-        text = (Math.round(elapsed/tMonth) === 1) ? 'month' : 'months';
-        return 'approximately ' + Math.round(elapsed/tMonth) + ' ' + text;
+        text = (Math.round(elapsed / tMonth) === 1) ? 'month' : 'months';
+        return 'approximately ' + Math.round(elapsed / tMonth) + ' ' + text;
       } else {
-        text = (Math.round(elapsed/tYear) === 1) ? 'year' : 'years';
-        return 'approximately ' + Math.round(elapsed/tYear ) + ' ' + text;
+        text = (Math.round(elapsed / tYear) === 1) ? 'year' : 'years';
+        return 'approximately ' + Math.round(elapsed / tYear) + ' ' + text;
       }
     },
   };
