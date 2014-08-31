@@ -72,9 +72,13 @@
 
   // Builds route handlers and dom render handlers
   var build = function (route, path) {
-
+    console.log('BUILD');
     require([paths.controllers + '/' + path], function (controller) {
-
+      // Fire the controller's init method
+      if (controller.init && {}.toString.call(controller.init) === '[object Function]') {
+        controller.init();
+      }
+      
       controllers.push(controller);
 
       var routeHandler = {};
