@@ -74,8 +74,11 @@
   var build = function (route, path) {
     require([paths.controllers + '/' + path], function (controller) {
       // Fire the controller's init method
-      if (controller.init && {}.toString.call(controller.init) === '[object Function]') {
+      if (controller.init && {}.toString.call(controller.init) === '[object Function]' && !controller.hasInit) {
         controller.init();
+        // In some cases a route controller may be call twice when the route is used more than once
+        // in the routes config. Mark a checked conditional value to prevent this.
+        controller.hasInit = true;
       }
       
       controllers.push(controller);
