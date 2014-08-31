@@ -119,6 +119,11 @@ define([], function () {
   var myController = {
 
     pageTitle: 'Foo',
+    
+    init: function() {
+      // Do something once when the app is loaded
+      // Good for sub / pub
+    },
 
     before: function (fn) {
       // Check for condition to allow route to be loaded or not...
