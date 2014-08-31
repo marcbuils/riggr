@@ -72,7 +72,6 @@
 
   // Builds route handlers and dom render handlers
   var build = function (route, path) {
-    console.log('BUILD');
     require([paths.controllers + '/' + path], function (controller) {
       // Fire the controller's init method
       if (controller.init && {}.toString.call(controller.init) === '[object Function]') {
@@ -183,6 +182,11 @@
 
     // Set count
     count = Object.size(app.routes);
+    
+    // Fire the app controller's init method
+    if (app.init && {}.toString.call(app.init) === '[object Function]') {
+      app.init();
+    }
 
     // Build controller+route handlers
     for (var route in app.routes) {
