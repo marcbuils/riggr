@@ -101,7 +101,7 @@
     }
 
     // Check for beforeAppRoute
-    if (routeObj.hasOwnProperty('beforeAppRoute') && typeof routeObj.beforeAppRoute === 'function') {
+    if (routeObj && routeObj.hasOwnProperty('beforeAppRoute') && typeof routeObj.beforeAppRoute === 'function') {
       routeObj.beforeAppRoute(function (res) {
         if (res) {
           processControllerRouting();
