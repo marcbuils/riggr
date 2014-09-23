@@ -120,11 +120,13 @@
       // Create route
       router.on(route, routeHandler);
 
-      // Add lib references
+      // Add libs to controller
       if (controller.hasOwnProperty('libs')) {
         for (var lib in controller.libs) {
           // Set libs.{key} to required lib for use
-          controller.libs[lib] = require([paths.libs + '/' + controller.libs[lib]]);
+          require([paths.libs + '/' + controller.libs[lib]], function (curLib) {
+            controller.libs[lib] = curLib;
+          });
         }
       }
 
