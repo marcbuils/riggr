@@ -3,7 +3,7 @@ require(['require-config'], function () {
     'riggr',
     'controllers/app',
   ], function (rigg, app) {
-    
+
     // Set app title
     app.title = 'Demo';
     // Set view transition
@@ -11,10 +11,11 @@ require(['require-config'], function () {
     // Set paths
     app.paths = {
       controllers: 'controllers',
-      views: '../views'
+      views: '../views',
+      libs: 'libs'
     };
     // Initialize app
     rigg(app);
-    
+
   });
 });

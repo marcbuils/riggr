@@ -21,7 +21,8 @@
   var controllers = [];
   var paths = {
     controllers: 'controllers',
-    views: 'views'
+    views: 'views',
+    libs: 'libs'
   };
   var appContainer = 'appContainer';
   var viewContainer = 'viewContainer';
@@ -118,6 +119,14 @@
 
       // Create route
       router.on(route, routeHandler);
+
+      // Add lib references
+      if (controller.hasOwnProperty('libs')) {
+        for (var lib in controller.libs) {
+          // Set libs.{key} to required lib for use
+          controller.libs[lib] = require([paths.libs + '/' + controller.libs[lib]]);
+        }
+      }
 
       // Increment loaded tracker
       loaded++;
