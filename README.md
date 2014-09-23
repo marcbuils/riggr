@@ -10,6 +10,7 @@ Set of utils for building web app's using [RequireJS](http://requirejs.org/),
 * [Usage / Getting Started](#usage)
 * [Containers and Regions](#containers)
 * [Routing](#routing)
+* [Libs & Abstractions](#libs)
 * [KnockoutJS and Binding](#knockout--binding)
 * [Observer Patterns](#observer)
 * [Requests and Stored XHR](#requests)
@@ -119,7 +120,7 @@ define([], function () {
   var myController = {
 
     pageTitle: 'Foo',
-    
+
     init: function() {
       // Do something once when the app is loaded
       // Good for sub / pub
@@ -150,6 +151,44 @@ define([], function () {
 Views should match the pathing of their associated controller and
 automatically load on route match (and if applicable, after passing of the `before`
 handler).
+
+### Libs
+
+To help maintain clean abstractions, a `libs` object in the controller allows for
+specifying lib files utilized by controllers.
+
+To utilize, in `main.js` specify an app libs path:
+
+```javascript
+  // Set paths
+  app.paths = {
+    controllers: 'controllers',
+    views: '../views',
+    libs: 'libs'
+  };
+```
+
+In the above, the `libs` directory is at the same directory level as the
+`controllers` root.
+
+In the controller where the lib is utilized, simply specify a `libs` object:
+
+```javascript
+  libs: {
+    myUtil: 'my-util'
+  }
+```
+
+Above `my-util` is pathed as `libs/my-util.js`. The `my-util` should utilize the
+`define()` wrapper as used with other RequireJS files.
+
+Calling the lib's methods or properties inside the controller is then done via:
+
+```javascript
+  someNativeMethod: function () {
+    this.libs.myUtil.someUtilMethod();
+  }
+```
 
 ### Knockout & Binding
 
@@ -521,7 +560,7 @@ validation.test({
 
 Since the above contains all passing values the return of this test would be `true`.
 
-In the case of a failure the original object is returned with only the failing 
+In the case of a failure the original object is returned with only the failing
 tests included. For example:
 
 ```javascript
@@ -542,8 +581,8 @@ The above would return:
 
 ### Dates
 
-Since timestamps and date formats are common across almost all front-end applications 
-riggr includes a `{riggr-path}/date.js` utility which allows simple formating 
+Since timestamps and date formats are common across almost all front-end applications
+riggr includes a `{riggr-path}/date.js` utility which allows simple formating
 of timestamps:
 
 ```javascript
