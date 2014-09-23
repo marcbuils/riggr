@@ -80,7 +80,7 @@
         // in the routes config. Mark a checked conditional value to prevent this.
         controller.hasInit = true;
       }
-      
+
       controllers.push(controller);
 
       var routeHandler = {};
@@ -185,7 +185,7 @@
 
     // Set count
     count = Object.size(app.routes);
-    
+
     // Fire the app controller's init method
     if (app.init && {}.toString.call(app.init) === '[object Function]') {
       app.init();
