@@ -6,6 +6,7 @@ define([
 
     pageTitle: 'One',
 
+    // Declare libs to utilize
     libs: {
       util: 'util'
     },
@@ -26,6 +27,7 @@ define([
       console.log('Loaded One');
       // Fire util method
       console.log('libs', this.libs);
+      // Example of utilizing a util lib method
       this.libs.util.utilMethodOne();
     },
 
