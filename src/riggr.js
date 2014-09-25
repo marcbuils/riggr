@@ -44,6 +44,24 @@
     }
   };
 
+  // Apply libs
+  var applyLibs = function (controller) {
+    // Applies lib to controller lib object
+    var applyLib = function (lib) {
+      require([paths.libs + '/' + controller.libs[lib]], function (cur) {
+        controller.libs[lib] = cur;
+      });
+    };
+
+    // Add libs to controller
+    if (controller.hasOwnProperty('libs')) {
+      for (var lib in controller.libs) {
+        // Set libs.{key} to required lib for use
+        applyLib(lib);
+      }
+    }
+  };
+
   // Build load handler
   var loadView = function (view, controller, args, load) {
     var el = document.getElementById(viewContainer);
@@ -117,23 +135,11 @@
         routeHandler.unload = controller.unload.bind(controller);
       }
 
+      // Apply libs
+      applyLibs(controller);
+
       // Create route
       router.on(route, routeHandler);
-
-      // Applies lib to controller lib object
-      var applyLib = function (lib) {
-        require([paths.libs + '/' + controller.libs[lib]], function (cur) {
-          controller.libs[lib] = cur;
-        });
-      };
-
-      // Add libs to controller
-      if (controller.hasOwnProperty('libs')) {
-        for (var lib in controller.libs) {
-          // Set libs.{key} to required lib for use
-          applyLib(lib);
-        }
-      }
 
       // Increment loaded tracker
       loaded++;
@@ -191,6 +197,9 @@
     if (app.hasOwnProperty('beforeRoute')) {
       beforeRoute = app.beforeRoute.bind(app);
     }
+
+    // Apply libs
+    applyLibs(app);
 
     // Set title
     appTitle = (app.hasOwnProperty('title')) ? app.title : false;
