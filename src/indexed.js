@@ -179,24 +179,24 @@
             }
 
             function evaluate(val1, op, val2) {
-                switch (op) {
-                case '$gt':
-                  return val1 > val2;
-                case '$lt':
-                  return val1 < val2;
-                case '$gte':
-                  return val1 >= val2;
-                case '$lte':
-                  return val1 <= val2;
-                case '$ne':
-                  return val1 != val2;
-                case '$eq':
-                  return val1 == val2;
-                case '$like':
-                  return new RegExp(val2, 'i').test(val1);
-                }
+              switch (op) {
+              case '$gt':
+                return val1 > val2;
+              case '$lt':
+                return val1 < val2;
+              case '$gte':
+                return val1 >= val2;
+              case '$lte':
+                return val1 <= val2;
+              case '$ne':
+                return val1 != val2;
+              case '$eq':
+                return val1 == val2;
+              case '$like':
+                return new RegExp(val2, 'i').test(val1);
               }
-              // Test query
+            }
+            // Test query
             if (query) {
               var match = true;
               query.forEach(function (cond) {
