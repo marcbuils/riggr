@@ -5,7 +5,9 @@ define([
   var two = {
 
     pageTitle: 'Two',
-
+    
+    userRating: ko.observable(null),
+    
     // Test observable
     param: ko.observable(),
 

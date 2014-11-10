@@ -21,7 +21,8 @@
   var controllers = [];
   var paths = {
     controllers: 'controllers',
-    views: 'views'
+    views: 'views',
+    libs: 'libs'
   };
   var appContainer = 'appContainer';
   var viewContainer = 'viewContainer';
@@ -40,6 +41,37 @@
     // Page title only
     if (!appTitle && pageTitle) {
       document.title = pageTitle;
+    }
+  };
+
+  // Apply libs
+  var applyLibs = function (controller, cb) {
+    var totalLibs;
+    var libsLoaded = 0;
+    // Applies lib to controller lib object
+    var applyLib = function (lib) {
+      require([paths.libs + '/' + controller.libs[lib]], function (cur) {
+        controller.libs[lib] = cur;
+        // Increment libs loaded count
+        libsLoaded++;
+        // All libs loaded?
+        if (libsLoaded === totalLibs) {
+          // Fire callback
+          cb();
+        }
+      });
+    };
+
+    // Add libs to controller
+    if (controller.hasOwnProperty('libs')) {
+      totalLibs = Object.keys(controller.libs).length;
+      for (var lib in controller.libs) {
+        // Set libs.{key} to required lib for use
+        applyLib(lib);
+      }
+    } else {
+      // No libs, fire callback
+      cb();
     }
   };
 
@@ -81,8 +113,6 @@
         controller.hasInit = true;
       }
 
-      console.log(controllers);
-
       controllers.push(controller);
 
       var routeHandler = {};
@@ -118,16 +148,21 @@
         routeHandler.unload = controller.unload.bind(controller);
       }
 
-      // Create route
-      router.on(route, routeHandler);
+      // Apply libs
+      applyLibs(controller, function () {
 
-      // Increment loaded tracker
-      loaded++;
+        // Create route
+        router.on(route, routeHandler);
 
-      // On last route, process...
-      if (count === loaded) {
-        loadApp();
-      }
+        // Increment loaded tracker
+        loaded++;
+
+        // On last route, process...
+        if (count === loaded) {
+          loadApp();
+        }
+
+      });
 
     });
   };
@@ -178,25 +213,28 @@
       beforeRoute = app.beforeRoute.bind(app);
     }
 
-    // Set title
-    appTitle = (app.hasOwnProperty('title')) ? app.title : false;
-    setTitle('Loading');
+    // Apply libs
+    applyLibs(app, function () {
+      // Set title
+      appTitle = (app.hasOwnProperty('title')) ? app.title : false;
+      setTitle('Loading');
 
-    // Set transition
-    transition = (app.hasOwnProperty('transition')) ? app.transition : 0;
+      // Set transition
+      transition = (app.hasOwnProperty('transition')) ? app.transition : 0;
 
-    // Set count
-    count = Object.size(app.routes);
+      // Set count
+      count = Object.size(app.routes);
 
-    // Fire the app controller's init method
-    if (app.init && {}.toString.call(app.init) === '[object Function]') {
-      app.init();
-    }
+      // Fire the app controller's init method
+      if (app.init && {}.toString.call(app.init) === '[object Function]') {
+        app.init();
+      }
 
-    // Build controller+route handlers
-    for (var route in app.routes) {
-      build(route, app.routes[route]);
-    }
+      // Build controller+route handlers
+      for (var route in app.routes) {
+        build(route, app.routes[route]);
+      }
+    });
   };
 
   return rigg;

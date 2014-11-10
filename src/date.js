@@ -217,9 +217,10 @@
     /**
      * Returns the elapsed time from an existing timestamp
      * @param timestamp {Integer} The timestamp to measure against
+     * @param now {Integer=} Optional relpacement for the current timestamp
      * @return The elapsed time
      */
-    elapsedTime: function (timestamp) {
+    elapsedTime: function (timestamp, now) {
       var tMinute = 60 * 1000;
       var tHour = tMinute * 60;
       var tDay = tHour * 24;
@@ -227,7 +228,7 @@
       var tYear = tDay * 365;
       var text;
 
-      var elapsed = new Date().getTime() - timestamp;
+      var elapsed = (now || Date.now()) - timestamp;
 
       if (elapsed < tMinute) {
         text = (Math.round(elapsed / 1000) === 1) ? 'second' : 'seconds';

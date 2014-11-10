@@ -53,7 +53,7 @@
     var processControllerRouting = function () {
 
       // Check and run 'before'
-      if (routeObj.hasOwnProperty('before') && typeof routeObj.before === 'function') {
+      if (typeof routeObj.before === 'function') {
         // Should fire callback with arg 'res' = true/false
         routeObj.before(function (res) {
           if (res && routeObj.load) {
@@ -68,7 +68,7 @@
             }
           }
         });
-      } else {
+      } else if (typeof routeObj.load === 'function') {
         // No 'before', just load...
         routeObj.load.apply(this, args);
         self.history.push({
@@ -77,8 +77,8 @@
         });
       }
 
-      // Check and run 'load' if fn exists and before has passed
-      if (routeObj.load && !routeObj.hasOwnProperty('before')) {
+      // Check and run 'load' if fn exists and before doesn't exist
+      if (typeof routeObj.load === 'function' && !routeObj.before) {
         routeObj.load.apply(this, args);
         self.history.push({
           matcher: route,
@@ -96,18 +96,18 @@
     routeObj = self.routes[route];
 
     // Get current route and unload
-    if (prevRoute && prevRoute.unload) {
+    if (prevRoute && typeof prevRoute.unload === 'function') {
       prevRoute.unload.apply(this);
     }
 
     // Check for beforeAppRoute
-    if (routeObj.hasOwnProperty('beforeAppRoute') && typeof routeObj.beforeAppRoute === 'function') {
+    if (routeObj && typeof routeObj.beforeAppRoute === 'function') {
       routeObj.beforeAppRoute(function (res) {
         if (res) {
           processControllerRouting();
         }
       });
-    } else {
+    } else if (routeObj) {
       processControllerRouting();
     }
 
