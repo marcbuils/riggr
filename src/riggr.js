@@ -102,6 +102,44 @@
     }
   };
 
+  /**
+   * Registers and / or resets observables (used in controller before method)
+   * @param self {Object} The controller scope
+   */
+  var registerObservables = function (self) {
+    // Make sure the controller scope was passed
+    if (!self) {
+      console.error('Method register requires argument one to be controller scope');
+      return;
+    }
+
+    // Do nothing if observables is not defined
+    if (!self.observables) {
+      return;
+    }
+
+    // Get the observables config
+    var obs = self.observables;
+
+    // Loop through obs and create or reset observables
+    for (var name in obs) {
+      // Check if the observable exists
+      if (self[name] && typeof self[name] === 'function') {
+        // reset the observable or non observable
+        if (typeof obs[name] !== 'object') {
+          self[name] = obs[name].value;
+        } else {
+          self[name](obs[name].value);
+        }
+      } else {
+        // Create the observable
+        self[name] = (obs[name] && obs[name].type === 'array') ? ko.observableArray(obs[name].value) :
+          (obs[name] === null || typeof obs[name] !== 'object') ? obs[name] :
+          ko.observable(obs[name].value);
+      }
+    }
+  };
+
   // Builds route handlers and dom render handlers
   var build = function (route, path) {
     require([paths.controllers + '/' + path], function (controller) {
@@ -124,7 +162,11 @@
 
       // Create before handler
       if (controller.hasOwnProperty('before')) {
-        routeHandler.before = controller.before.bind(controller);
+        routeHandler.before = function () {
+          var args = arguments;
+          registerObservables(controller);
+          controller.before.apply(controller, args);
+        };
       }
 
       // Create load handler
