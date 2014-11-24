@@ -12,6 +12,7 @@ Set of utils for building web app's using [RequireJS](http://requirejs.org/),
 * [Routing](#routing)
 * [Libs & Abstractions](#libs)
 * [KnockoutJS and Binding](#knockout--binding)
+* [KnockoutJS Observables](#knockout--observables)
 * [Observer Patterns](#observer)
 * [Requests and Stored XHR](#requests)
 * [Store - localStorage](#store)
@@ -219,6 +220,41 @@ corresponding view will respond to the `ko` objects.
 ```html
 <span data-bind="text: bar"></span>
 ```
+
+### Knockout Observables
+
+To assist in easily managing and resetting Knockout observables, an object named `observables` can
+be defined on a controller. When set, riggr dynamically creates the observables during the controller
+before method and resets all defined observables that already exist. 
+
+```
+define([], function () {
+
+  var myController = {
+
+    observables: {
+      foo: { 
+        value: 'bar' 
+      },
+      // Create an observableArray
+      obsArr: {
+        value: [], // Will default to empty array, does not need to be defined
+        type: 'array'
+      },
+      // Non observables can also be managed here
+      nonObs: true
+    }
+
+    // ...additional controller code...
+
+  };
+
+  return myController;
+
+});
+```
+
+The use of this property is optional, observables can still be set in the controller.
 
 ### Observer
 
