@@ -12,7 +12,7 @@ Set of utils for building web app's using [RequireJS](http://requirejs.org/),
 * [Routing](#routing)
 * [Libs & Abstractions](#libs)
 * [KnockoutJS and Binding](#knockout--binding)
-* [KnockoutJS Observables](#knockout--observables)
+* [KnockoutJS Observables](#knockout-observables)
 * [Observer Patterns](#observer)
 * [Requests and Stored XHR](#requests)
 * [Store - localStorage](#store)
