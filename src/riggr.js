@@ -129,7 +129,8 @@
         if (typeof obs[name] !== 'object') {
           self[name] = obs[name].value;
         } else {
-          self[name](obs[name].value);
+          var value = (obs[name].type === 'array' && !obs[name].value) ? [] : obs[name].value;
+          self[name](value);
         }
       } else {
         // Create the observable
