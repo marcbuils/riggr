@@ -124,9 +124,13 @@
     // Loop through obs and create or reset observables
     for (var name in obs) {
       // Check if the observable exists
-      if (self[name] && typeof self[name] === 'function') {
+      if (self[name] && Object.prototype.toString.call(self[name]) === '[object Function]') {
+        // Check if the observable should not be reset
+        if (obs[name].hasOwnProperty('reset') && obs[name].reset === false) {
+          continue;
+        }
         // reset the observable or non observable
-        if (typeof obs[name] !== 'object') {
+        if (Object.prototype.toString.call(obs[name]) !== '[object Object]') {
           self[name] = obs[name].value;
         } else {
           var value = (obs[name].type === 'array' && !obs[name].value) ? [] : obs[name].value;
@@ -135,7 +139,7 @@
       } else {
         // Create the observable
         self[name] = (obs[name] && obs[name].type === 'array') ? ko.observableArray(obs[name].value) :
-          (obs[name] === null || typeof obs[name] !== 'object') ? obs[name] :
+          (obs[name] === null || Object.prototype.toString.call(obs[name]) !== '[object Object]') ? obs[name] :
           ko.observable(obs[name].value);
       }
     }
