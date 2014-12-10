@@ -191,7 +191,7 @@ Calling the lib's methods or properties inside the controller is then done via:
   }
 ```
 
-Libs can also be share across applications by specifying a sharedLibs directory:
+Libs can also be shared across applications by specifying a sharedLibs directory:
 
 ```javascript
   // Set paths
