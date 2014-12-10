@@ -191,6 +191,26 @@ Calling the lib's methods or properties inside the controller is then done via:
   }
 ```
 
+Libs can also be share across applications by specifying a sharedLibs directory:
+
+```javascript
+  // Set paths
+  app.paths = {
+    /* ... other paths ... */
+    sharedLibs: '../js/libs'
+  };
+```
+
+To include a shared libary, define it as an object:
+
+```javascript
+  libs: {
+    mySharedLib: { 
+      'my-shared-lib'
+    }
+  }
+```
+
 ### Knockout & Binding
 
 When a controller is loaded, Knockout's `applyBindings` method is fired to create
