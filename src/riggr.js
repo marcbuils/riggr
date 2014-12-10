@@ -49,22 +49,22 @@
   var applyLibs = function (controller, cb) {
     var totalLibs;
     var libsLoaded = 0;
-    
+
     // Applies lib to controller lib object
-    var applyLib = function (lib) {
+    var applyLib = function (lib, libKey) {
       // Determine if this is a shared lib
       var isShared = (Object.prototype.toString.call(lib) === '[object Object]') ? true : false;
-      
+
       // Warn if the app.paths.sharedLibs config is not defined
       if (isShared && !paths.sharedLibs) {
         console.error('The sharedLibs directory must be defined in the paths config before using a shared lib');
       }
-      
+
       // Determine the lib path, shared libs will be objects
       var libPath = (isShared) ? paths.sharedLibs + '/' + lib.path : paths.libs + '/' + controller.libs[lib];
-      
+
       require([libPath], function (cur) {
-        controller.libs[(isShared) ? lib.path : lib] = cur;
+        controller.libs[(isShared) ? libKey : lib] = cur;
         // Increment libs loaded count
         libsLoaded++;
         // All libs loaded?
@@ -80,10 +80,12 @@
       totalLibs = Object.keys(controller.libs).length;
       for (var lib in controller.libs) {
         // Set libs.{key} to required lib for use
+        var libKey = false;
         if (Object.prototype.toString.call(controller.libs[lib]) === '[object Object]') {
+          libKey = lib;
           lib = controller.libs[lib];
         }
-        applyLib(lib);
+        applyLib(lib, libKey);
       }
     } else {
       // No libs, fire callback
