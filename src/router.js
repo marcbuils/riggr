@@ -52,40 +52,31 @@
 
     var processControllerRouting = function () {
 
+      var doLoad = function () {
+        if (typeof routeObj.load === 'function') {
+          routeObj.load.apply(null, args);
+          self.history.push({
+            matcher: route,
+            fragment: fragment
+          });
+        }
+      };
+
       // Check and run 'before'
       if (typeof routeObj.before === 'function') {
         // Should fire callback with arg 'res' = true/false
         routeObj.before(function (res) {
-          if (res && routeObj.load) {
-            routeObj.load.apply(this, args);
-            self.history.push({
-              matcher: route,
-              fragment: fragment
-            });
+          if (res) {
+            doLoad();
           } else {
             if (self.history && self.history.length) {
               self.go(self.history[self.history.length - 1].fragment);
             }
           }
         });
-      } else if (typeof routeObj.load === 'function') {
-        // No 'before', just load...
-        routeObj.load.apply(this, args);
-        self.history.push({
-          matcher: route,
-          fragment: fragment
-        });
+      } else {
+        doLoad();
       }
-
-      // Check and run 'load' if fn exists and before doesn't exist
-      if (typeof routeObj.load === 'function' && !routeObj.before) {
-        routeObj.load.apply(this, args);
-        self.history.push({
-          matcher: route,
-          fragment: fragment
-        });
-      }
-
     };
 
     // Get prev_route
