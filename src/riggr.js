@@ -11,7 +11,7 @@
   } else {
     root.riggr = factory(root.router, root.observer, root.ko, root.$);
   }
-}(this, function (router, observer, ko) {
+}(this, function (router, observer, ko, $) {
 
   // Base vars, defaults
   var count = 0;
@@ -125,40 +125,35 @@
    * @param self {Object} The controller scope
    */
   var registerObservables = function (self) {
-    // Make sure the controller scope was passed
+
     if (!self) {
       console.error('Method register requires argument one to be controller scope');
       return;
     }
 
-    // Do nothing if observables is not defined
-    if (!self.observables) {
-      return;
-    }
-
-    // Get the observables config
-    var obs = self.observables;
-
-    // Loop through obs and create or reset observables
-    for (var name in obs) {
-      // Check if the observable exists
-      if (self[name] && Object.prototype.toString.call(self[name]) === '[object Function]') {
-        // Check if the observable should not be reset
-        if (obs[name].hasOwnProperty('reset') && obs[name].reset === false) {
-          continue;
-        }
-        // reset the observable or non observable
-        if (Object.prototype.toString.call(obs[name]) !== '[object Object]') {
-          self[name] = obs[name].value;
-        } else {
-          var value = (obs[name].type === 'array' && !obs[name].value) ? [] : obs[name].value;
-          self[name](value);
-        }
+    var def;
+    var isObservable;
+    var koType;
+    var value;
+    //reset or create observables
+    for (var obsName in self.observables) {
+      def = self.observables[obsName];
+      if (def.reset === false && self[obsName] !== void 0) {
+        continue;
+      }
+      isObservable = (def.type || def.value !== void 0) ? true : false;
+      value = isObservable ? def.value : def;
+      koType = ko.observable;
+      if (def.type === 'array') {
+        koType = ko.observableArray;
+        value = value && value.length ? JSON.parse(JSON.stringify(value)) : [];
       } else {
-        // Create the observable
-        self[name] = (obs[name] && obs[name].type === 'array') ? ko.observableArray(obs[name].value) :
-          (obs[name] === null || Object.prototype.toString.call(obs[name]) !== '[object Object]') ? obs[name] :
-          ko.observable(obs[name].value);
+        value = typeof value === 'object' ? JSON.parse(JSON.stringify(value)) : value;
+      }
+      if (ko.isObservable(self[obsName])) {
+        self[obsName](value);
+      } else {
+        self[obsName] = isObservable ? koType(value) : value;
       }
     }
   };
