@@ -181,9 +181,13 @@
       // Create before handler
       if (controller.hasOwnProperty('before')) {
         routeHandler.before = function () {
-          var args = arguments;
           registerObservables(controller);
-          controller.before.apply(controller, args);
+          controller.before.apply(controller, arguments);
+        };
+      } else {
+        routeHandler.before = function (fn) {
+          registerObservables(controller);
+          fn(true);
         };
       }
 
