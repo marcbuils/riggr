@@ -133,6 +133,10 @@
     format: function (date, preset, utc) {
       var self = this;
 
+      if (!date) {
+        return false;
+      }
+
       // Define regex values
       var token = /d{1,2}|D{1,2}|m{1,2}|M{1,2}|yy(?:yy)?|([HhisAa])\1?|[LloSe]|"[^"]*"|'[^']*'/g;
       var timezoneClip = /[^-+\dA-Z]/g;
