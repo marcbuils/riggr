@@ -135,6 +135,11 @@
     var isObservable;
     var koType;
     var value;
+    var el = document.getElementById(viewContainer);
+    
+    // Unsubscribe all observables
+    ko.cleanNode(el);
+    
     //reset or create observables
     for (var obsName in self.observables) {
       def = self.observables[obsName];
