@@ -97,14 +97,14 @@
   var loadView = function (view, controller, args, load) {
     var el = document.getElementById(viewContainer);
     // Transition-out
-    $(el).fadeOut(transition, function () {
+    $(el).fadeTo(transition, 0, function () {
       // Set html
       $(el).html(view);
       // Bind it up
       ko.cleanNode(el);
       ko.applyBindings(controller, el);
       // Process transition-in
-      $(this).fadeIn(transition);
+      $(this).fadeTo(transition, 1.0);
       // Fire load
       if (load) {
         controller.load.apply(controller, args);
@@ -136,10 +136,10 @@
     var koType;
     var value;
     var el = document.getElementById(viewContainer);
-    
+
     // Unsubscribe all observables
     ko.cleanNode(el);
-    
+
     //reset or create observables
     for (var obsName in self.observables) {
       def = self.observables[obsName];
