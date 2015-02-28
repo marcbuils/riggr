@@ -34,8 +34,9 @@ define([
     beforeRoute: function (fn) {
       // Notify time on route
       var timeOnPage = + new Date() - this.timeStartRoute;
+      // On nav to new route, show time on (prev) route
       if (this.curRoute) {
-        console.log('Time on Page:', this.curRoute, this.curTitle, timeOnPage);
+        console.log('Time on Page:', this.curRoute, document.title, timeOnPage);
       }
       fn(true);
     },
@@ -44,8 +45,6 @@ define([
     onRoute: function () {
       // Set timestamp observable
       this.timestamp(+new Date());
-      this.curRoute = window.location.hash.substr(1);
-      this.curTitle = document.title;
     }
   };
 

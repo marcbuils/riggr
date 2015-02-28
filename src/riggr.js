@@ -250,6 +250,8 @@
         if (app.hasOwnProperty('onRoute')) {
           app.onRoute.apply(app);
         }
+        // Set current route on App
+        App.curRoute = window.location.hash.substr(1);
       });
       // Check for 'load'
       if (app.hasOwnProperty('load')) {
