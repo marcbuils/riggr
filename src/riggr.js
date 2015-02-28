@@ -14,6 +14,7 @@
 }(this, function (router, observer, ko, $) {
 
   // Base vars, defaults
+  var App;
   var count = 0;
   var loaded = 0;
   var appTitle = false;
@@ -118,6 +119,7 @@
     } else {
       setTitle(false);
     }
+    App.timeStartRoute = +new Date();
   };
 
   /**
@@ -260,6 +262,8 @@
 
   // Loops through and loads routes, sets app properties
   var rigg = function (app) {
+    // Expose app
+    App = app;
     // Get size
     Object.size = function (obj) {
       var size = 0,
@@ -298,6 +302,9 @@
       if (app.init && {}.toString.call(app.init) === '[object Function]') {
         app.init();
       }
+
+      // Set tracking for time on route
+      app.timeStartRoute = +new Date();
 
       // Build controller+route handlers
       for (var route in app.routes) {

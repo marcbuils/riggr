@@ -32,6 +32,11 @@ define([
 
     // Before any routes are loaded/processed
     beforeRoute: function (fn) {
+      // Notify time on route
+      var timeOnPage = + new Date() - this.timeStartRoute;
+      if (this.curRoute) {
+        console.log('Time on Page:', this.curRoute, this.curTitle, timeOnPage);
+      }
       fn(true);
     },
 
@@ -39,6 +44,8 @@ define([
     onRoute: function () {
       // Set timestamp observable
       this.timestamp(+new Date());
+      this.curRoute = window.location.hash.substr(1);
+      this.curTitle = document.title;
     }
   };
 
