@@ -126,9 +126,9 @@
    * Registers and / or resets observables (used in controller before method)
    * @param self {Object} The controller scope
    */
-  var registerObservables = function (self) {
+  var registerObservables = function (vm) {
 
-    if (!self) {
+    if (!vm) {
       console.error('Method register requires argument one to be controller scope');
       return;
     }
@@ -143,9 +143,9 @@
     ko.cleanNode(el);
 
     //reset or create observables
-    for (var obsName in self.observables) {
-      def = self.observables[obsName];
-      if (def.reset === false && self[obsName] !== void 0) {
+    for (var obsName in vm.observables) {
+      def = vm.observables[obsName];
+      if (def.reset === false && vm[obsName] !== void 0) {
         continue;
       }
       isObservable = (def.type || def.value !== void 0) ? true : false;
@@ -157,10 +157,10 @@
       } else {
         value = typeof value === 'object' ? JSON.parse(JSON.stringify(value)) : value;
       }
-      if (ko.isObservable(self[obsName])) {
-        self[obsName](value);
+      if (ko.isObservable(vm[obsName])) {
+        vm[obsName](value);
       } else {
-        self[obsName] = isObservable ? koType(value) : value;
+        vm[obsName] = isObservable ? koType(value) : value;
       }
     }
   };
@@ -218,6 +218,11 @@
       if (controller.hasOwnProperty('unload')) {
         routeHandler.unload = controller.unload.bind(controller);
       }
+
+      // Expose resetObservables method for the controller
+      controller.resetObservables = function () {
+        registerObservables(controller);
+      };
 
       // Apply libs
       applyLibs(controller, function () {
