@@ -1,3 +1,8 @@
+
+
+// Loops through and loads routes, sets app properties
+export default rigg;
+
 import ko from 'knockout';
 import $ from 'jquery';
 import observer from 'observer';
@@ -44,7 +49,7 @@ var applyLibs = function (controller, cb) {
   // Applies lib to controller lib object
   var applyLib = function (lib, libKey) {
     // Determine if this is a shared lib
-    var isShared = (Object.prototype.toString.call(lib) === '[object Object]') ? true : false;
+    var isShared = Object.prototype.toString.call(lib) === '[object Object]' ? true : false;
 
     // Warn if the app.paths.sharedLibs config is not defined
     if (isShared && !paths.sharedLibs) {
@@ -52,10 +57,10 @@ var applyLibs = function (controller, cb) {
     }
 
     // Determine the lib path, shared libs will be objects
-    var libPath = (isShared) ? paths.sharedLibs + '/' + lib.path : paths.libs + '/' + controller.libs[lib];
+    var libPath = isShared ? paths.sharedLibs + '/' + lib.path : paths.libs + '/' + controller.libs[lib];
 
     rigg.moduleLoader([libPath], function (cur) {
-      controller.libs[(isShared) ? libKey : lib] = cur;
+      controller.libs[isShared ? libKey : lib] = cur;
       // Increment libs loaded count
       libsLoaded++;
       // All libs loaded?
@@ -95,7 +100,7 @@ var loadView = function (view, controller, args, load) {
     ko.cleanNode(el);
     ko.applyBindings(controller, el);
     // Process transition-in
-    $(this).fadeTo(transition, 1.0);
+    $(this).fadeTo(transition, 1);
     // Fire load
     if (load) {
       controller.load.apply(controller, args);
@@ -138,7 +143,7 @@ var registerObservables = function (vm) {
     if (def.reset === false && vm[obsName] !== void 0) {
       continue;
     }
-    isObservable = (def.type || def.value !== void 0) ? true : false;
+    isObservable = def.type || def.value !== void 0 ? true : false;
     value = isObservable ? def.value : def;
     koType = ko.observable;
     if (def.type === 'array') {
@@ -159,7 +164,7 @@ var registerObservables = function (vm) {
 var build = function (route, path) {
   rigg.moduleLoader([paths.controllers + '/' + path], function (controller) {
     // Fire the controller's init method
-    if (controller.init && {}.toString.call(controller.init) === '[object Function]' && !controller.hasInit) {
+    if (controller.init && ({}).toString.call(controller.init) === '[object Function]' && !controller.hasInit) {
       controller.init();
       // In some cases a route controller may be call twice when the route is used more than once
       // in the routes config. Mark a checked conditional value to prevent this.
@@ -227,9 +232,7 @@ var build = function (route, path) {
       if (count === loaded) {
         loadApp();
       }
-
     });
-
   });
 };
 
@@ -258,15 +261,13 @@ var loadApp = function () {
     });
   });
 };
-
-// Loops through and loads routes, sets app properties
-export default function rigg (app) {
+function rigg(app) {
   // Expose app
   App = app;
   // Get size
   Object.size = function (obj) {
     var size = 0,
-      key;
+        key;
     for (key in obj) {
       if (obj.hasOwnProperty(key)) {
         size++;
@@ -288,17 +289,17 @@ export default function rigg (app) {
   // Apply libs
   applyLibs(app, function () {
     // Set title
-    appTitle = (app.hasOwnProperty('title')) ? app.title : false;
+    appTitle = app.hasOwnProperty('title') ? app.title : false;
     setTitle('Loading');
 
     // Set transition
-    transition = (app.hasOwnProperty('transition')) ? app.transition : 0;
+    transition = app.hasOwnProperty('transition') ? app.transition : 0;
 
     // Set count
     count = Object.size(app.routes);
 
     // Fire the app controller's init method
-    if (app.init && {}.toString.call(app.init) === '[object Function]') {
+    if (app.init && ({}).toString.call(app.init) === '[object Function]') {
       app.init();
     }
 
@@ -315,7 +316,7 @@ export default function rigg (app) {
 rigg.templateLoader = function (templates, cb) {
   window['require'] && window['require'](templates.map(function (str) {
     return 'text!' + str;
-  }),cb);
+  }), cb);
 };
 
 rigg.moduleLoader = function (modules, cb) {

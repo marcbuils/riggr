@@ -1,7 +1,27 @@
-import ko from 'knockout';
-import $ from 'jquery';
-import observer from 'observer';
-import router from 'router';
+var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+// Loops through and loads routes, sets app properties
+exports.default = rigg;
+
+var _ko = require('knockout');
+
+var _ko2 = _interopRequireWildcard(_ko);
+
+var _$ = require('jquery');
+
+var _$2 = _interopRequireWildcard(_$);
+
+var _observer = require('observer');
+
+var _observer2 = _interopRequireWildcard(_observer);
+
+var _router = require('router');
+
+var _router2 = _interopRequireWildcard(_router);
 
 // Base vars, defaults
 var App;
@@ -44,7 +64,7 @@ var applyLibs = function (controller, cb) {
   // Applies lib to controller lib object
   var applyLib = function (lib, libKey) {
     // Determine if this is a shared lib
-    var isShared = (Object.prototype.toString.call(lib) === '[object Object]') ? true : false;
+    var isShared = Object.prototype.toString.call(lib) === '[object Object]' ? true : false;
 
     // Warn if the app.paths.sharedLibs config is not defined
     if (isShared && !paths.sharedLibs) {
@@ -52,10 +72,10 @@ var applyLibs = function (controller, cb) {
     }
 
     // Determine the lib path, shared libs will be objects
-    var libPath = (isShared) ? paths.sharedLibs + '/' + lib.path : paths.libs + '/' + controller.libs[lib];
+    var libPath = isShared ? paths.sharedLibs + '/' + lib.path : paths.libs + '/' + controller.libs[lib];
 
     rigg.moduleLoader([libPath], function (cur) {
-      controller.libs[(isShared) ? libKey : lib] = cur;
+      controller.libs[isShared ? libKey : lib] = cur;
       // Increment libs loaded count
       libsLoaded++;
       // All libs loaded?
@@ -88,20 +108,20 @@ var applyLibs = function (controller, cb) {
 var loadView = function (view, controller, args, load) {
   var el = document.getElementById(viewContainer);
   // Transition-out
-  $(el).fadeTo(transition, 0, function () {
+  _$2.default(el).fadeTo(transition, 0, function () {
     // Set html
-    $(el).html(view);
+    _$2.default(el).html(view);
     // Bind it up
-    ko.cleanNode(el);
-    ko.applyBindings(controller, el);
+    _ko2.default.cleanNode(el);
+    _ko2.default.applyBindings(controller, el);
     // Process transition-in
-    $(this).fadeTo(transition, 1.0);
+    _$2.default(this).fadeTo(transition, 1);
     // Fire load
     if (load) {
       controller.load.apply(controller, args);
     }
     // Publish onRoute
-    observer.publish('onRoute');
+    _observer2.default.publish('onRoute');
   });
   // Set page title
   if (controller.hasOwnProperty('pageTitle')) {
@@ -130,7 +150,7 @@ var registerObservables = function (vm) {
   var el = document.getElementById(viewContainer);
 
   // Unsubscribe all observables
-  ko.cleanNode(el);
+  _ko2.default.cleanNode(el);
 
   //reset or create observables
   for (var obsName in vm.observables) {
@@ -138,16 +158,16 @@ var registerObservables = function (vm) {
     if (def.reset === false && vm[obsName] !== void 0) {
       continue;
     }
-    isObservable = (def.type || def.value !== void 0) ? true : false;
+    isObservable = def.type || def.value !== void 0 ? true : false;
     value = isObservable ? def.value : def;
-    koType = ko.observable;
+    koType = _ko2.default.observable;
     if (def.type === 'array') {
-      koType = ko.observableArray;
+      koType = _ko2.default.observableArray;
       value = value && value.length ? JSON.parse(JSON.stringify(value)) : [];
     } else {
       value = typeof value === 'object' ? JSON.parse(JSON.stringify(value)) : value;
     }
-    if (ko.isObservable(vm[obsName])) {
+    if (_ko2.default.isObservable(vm[obsName])) {
       vm[obsName](value);
     } else {
       vm[obsName] = isObservable ? koType(value) : value;
@@ -159,7 +179,7 @@ var registerObservables = function (vm) {
 var build = function (route, path) {
   rigg.moduleLoader([paths.controllers + '/' + path], function (controller) {
     // Fire the controller's init method
-    if (controller.init && {}.toString.call(controller.init) === '[object Function]' && !controller.hasInit) {
+    if (controller.init && ({}).toString.call(controller.init) === '[object Function]' && !controller.hasInit) {
       controller.init();
       // In some cases a route controller may be call twice when the route is used more than once
       // in the routes config. Mark a checked conditional value to prevent this.
@@ -218,7 +238,7 @@ var build = function (route, path) {
     applyLibs(controller, function () {
 
       // Create route
-      router.on(route, routeHandler);
+      _router2.default.on(route, routeHandler);
 
       // Increment loaded tracker
       loaded++;
@@ -227,9 +247,7 @@ var build = function (route, path) {
       if (count === loaded) {
         loadApp();
       }
-
     });
-
   });
 };
 
@@ -238,11 +256,11 @@ var loadApp = function () {
   rigg.moduleLoader([paths.controllers + '/app'], function (app) {
     rigg.templateLoader([paths.views + '/app.html'], function (appView) {
       // Load view into main
-      $('#' + appContainer).html(appView);
+      _$2.default('#' + appContainer).html(appView);
       // Apply app bindings
-      ko.applyBindings(app);
+      _ko2.default.applyBindings(app);
       // Listen for route change
-      observer.subscribe('onRoute', function () {
+      _observer2.default.subscribe('onRoute', function () {
         if (app.hasOwnProperty('onRoute')) {
           app.onRoute.apply(app);
         }
@@ -254,19 +272,17 @@ var loadApp = function () {
         app.load.apply(app);
       }
       // Process routes
-      router.process();
+      _router2.default.process();
     });
   });
 };
-
-// Loops through and loads routes, sets app properties
-export default function rigg (app) {
+function rigg(app) {
   // Expose app
   App = app;
   // Get size
   Object.size = function (obj) {
     var size = 0,
-      key;
+        key;
     for (key in obj) {
       if (obj.hasOwnProperty(key)) {
         size++;
@@ -288,17 +304,17 @@ export default function rigg (app) {
   // Apply libs
   applyLibs(app, function () {
     // Set title
-    appTitle = (app.hasOwnProperty('title')) ? app.title : false;
+    appTitle = app.hasOwnProperty('title') ? app.title : false;
     setTitle('Loading');
 
     // Set transition
-    transition = (app.hasOwnProperty('transition')) ? app.transition : 0;
+    transition = app.hasOwnProperty('transition') ? app.transition : 0;
 
     // Set count
     count = Object.size(app.routes);
 
     // Fire the app controller's init method
-    if (app.init && {}.toString.call(app.init) === '[object Function]') {
+    if (app.init && ({}).toString.call(app.init) === '[object Function]') {
       app.init();
     }
 
@@ -315,9 +331,10 @@ export default function rigg (app) {
 rigg.templateLoader = function (templates, cb) {
   window['require'] && window['require'](templates.map(function (str) {
     return 'text!' + str;
-  }),cb);
+  }), cb);
 };
 
 rigg.moduleLoader = function (modules, cb) {
   window['require'] && window['require'](modules, cb);
 };
+module.exports = exports.default;

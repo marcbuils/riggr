@@ -1,11 +1,16 @@
-export default function indexed(dbstore) {
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.default = indexed;
+
+function indexed(dbstore) {
   window.indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB;
   return {
 
     // Ensure callback exists and is function, then do it...
     processCB: function (cb, out) {
       if (cb && typeof cb === 'function') {
-        var err = (out === false) ? true : false;
+        var err = out === false ? true : false;
         cb(err, out);
       } else {
         console.error('Improper callback');
@@ -107,7 +112,6 @@ export default function indexed(dbstore) {
           };
 
           putNext();
-
         } else {
           // Insert single item
           data._id = new Date().getTime();
@@ -159,7 +163,7 @@ export default function indexed(dbstore) {
           }
 
           function evaluate(val1, op, val2) {
-              switch (op) {
+            switch (op) {
               case '$gt':
                 return val1 > val2;
               case '$lt':
@@ -174,9 +178,9 @@ export default function indexed(dbstore) {
                 return val1 == val2;
               case '$like':
                 return new RegExp(val2, 'i').test(val1);
-              }
             }
-            // Test query
+          }
+          // Test query
           if (query) {
             var match = true;
             query.forEach(function (cond) {
@@ -214,8 +218,7 @@ export default function indexed(dbstore) {
             results.push(result.value);
           }
           // Move on
-          result.
-          continue();
+          result.continue();
         };
 
         // Entire transaction complete
@@ -235,7 +238,6 @@ export default function indexed(dbstore) {
       request.onerror = function () {
         self.processCB(cb, false);
       };
-
     },
 
     // Find record(s)
@@ -314,4 +316,7 @@ export default function indexed(dbstore) {
       'VERSION_CHANGE': 'versionchange'
     }
   };
-};
+}
+
+;
+module.exports = exports.default;

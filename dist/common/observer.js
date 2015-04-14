@@ -1,4 +1,7 @@
-export default {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
 
   // Placeholder object for topics
   topics: {},
@@ -77,3 +80,4 @@ export default {
     return false;
   }
 };
+module.exports = exports.default;

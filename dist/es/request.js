@@ -20,29 +20,29 @@ var request = {
       // Set reqObj to the request
       reqObj = req;
     }
-  
+
     // Process URL parameters
     if (opts.url_params) {
       reqObj.url = request.processURLParams(reqObj.url, opts.url_params);
     }
-  
+
     // Make (and return) AJAX request
     return $.ajax(reqObj);
   },
-  
+
   processURLParams: function (url, params) {
     return url.replace(/\{([^}]+)\}/g, function (i, match) {
       return params[match];
     });
   },
-  
+
   create: function (name, opts) {
     request.stored[name] = opts;
   },
-  
+
   remove: function (name) {
     delete request.stored[name];
   }
 };
 
-export default request
+export default request;

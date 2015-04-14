@@ -1,4 +1,12 @@
-import $ from 'jquery';
+var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
+
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+
+var _$ = require('jquery');
+
+var _$2 = _interopRequireWildcard(_$);
 
 var request = {
   stored: {},
@@ -20,29 +28,30 @@ var request = {
       // Set reqObj to the request
       reqObj = req;
     }
-  
+
     // Process URL parameters
     if (opts.url_params) {
       reqObj.url = request.processURLParams(reqObj.url, opts.url_params);
     }
-  
+
     // Make (and return) AJAX request
-    return $.ajax(reqObj);
+    return _$2.default.ajax(reqObj);
   },
-  
+
   processURLParams: function (url, params) {
     return url.replace(/\{([^}]+)\}/g, function (i, match) {
       return params[match];
     });
   },
-  
+
   create: function (name, opts) {
     request.stored[name] = opts;
   },
-  
+
   remove: function (name) {
     delete request.stored[name];
   }
 };
 
-export default request
+exports.default = request;
+module.exports = exports.default;

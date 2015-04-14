@@ -1,4 +1,7 @@
-export default {
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.default = {
 
   // Check type of data
   checkType: function (obj) {
@@ -36,7 +39,8 @@ export default {
   },
 
   getStorage: function (session) {
-    return (session) ? sessionStorage : localStorage;
+    return session ? sessionStorage : localStorage;
   }
 
 };
+module.exports = exports.default;

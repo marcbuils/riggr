@@ -84,18 +84,10 @@ export default {
    * Put day / month names in i18n object; can be hooked to i18n class later
    */
   i18n: {
-    days: [
-      'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'
-    ],
-    daysFull: [
-      'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
-    ],
-    months: [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ],
-    monthsFull: [
-      'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
-    ]
+    days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    daysFull: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    monthsFull: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
   },
 
   /**
@@ -129,8 +121,7 @@ export default {
     // Define regex values
     var token = /d{1,2}|D{1,2}|m{1,2}|M{1,2}|yy(?:yy)?|([HhisAa])\1?|[LloSe]|"[^"]*"|'[^']*'/g;
     var timezoneClip = /[^-+\dA-Z]/g;
-    var timezone = '/\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) ' +
-      '(?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\\d{4})?)\\b/g';
+    var timezone = '/\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) ' + '(?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\\d{4})?)\\b/g';
     timezone = new RegExp(timezone);
 
     // Check arguments for any skipped
@@ -145,7 +136,7 @@ export default {
     }
 
     // Passing date through Date applies Date.parse, if necessary
-    date = (date) ? new Date(date) : new Date();
+    date = date ? new Date(date) : new Date();
     if (isNaN(date)) {
       throw new SyntaxError('Invalid Date');
     }
@@ -159,7 +150,7 @@ export default {
     }
 
     // Define various format properties
-    var _ = (utc) ? 'getUTC' : 'get';
+    var _ = utc ? 'getUTC' : 'get';
     var nDate = date[_ + 'Date']();
     var Day = date[_ + 'Day']();
     var Month = date[_ + 'Month']();
@@ -168,7 +159,7 @@ export default {
     var Minutes = date[_ + 'Minutes']();
     var Seconds = date[_ + 'Seconds']();
     var Milliseconds = date[_ + 'Milliseconds']();
-    var Offset = (utc) ? 0 : date.getTimezoneOffset();
+    var Offset = utc ? 0 : date.getTimezoneOffset();
 
     // Patterns to match from
     var patterns = {
@@ -191,7 +182,7 @@ export default {
       s: Seconds,
       ss: self.pad(Seconds),
       l: self.pad(Milliseconds, 3),
-      L: self.pad((Milliseconds > 99) ? Math.round(Milliseconds / 10) : Milliseconds),
+      L: self.pad(Milliseconds > 99 ? Math.round(Milliseconds / 10) : Milliseconds),
       a: Hours < 12 ? 'a' : 'p',
       aa: Hours < 12 ? 'am' : 'pm',
       A: Hours < 12 ? 'A' : 'P',
@@ -203,7 +194,7 @@ export default {
 
     // Get and send the new date value back
     return preset.replace(token, function (output) {
-      return (output in patterns) ? patterns[output] : output.slice(1, output.length - 1);
+      return output in patterns ? patterns[output] : output.slice(1, output.length - 1);
     });
   },
 
@@ -224,23 +215,22 @@ export default {
     var elapsed = (now || Date.now()) - timestamp;
 
     if (elapsed < tMinute) {
-      text = (Math.round(elapsed / 1000) === 1) ? 'second' : 'seconds';
+      text = Math.round(elapsed / 1000) === 1 ? 'second' : 'seconds';
       return Math.round(elapsed / 1000) + ' ' + text;
     } else if (elapsed < tHour) {
-      text = (Math.round(elapsed / tMinute) === 1) ? 'minute' : 'minutes';
+      text = Math.round(elapsed / tMinute) === 1 ? 'minute' : 'minutes';
       return Math.round(elapsed / tMinute) + ' ' + text;
     } else if (elapsed < tDay) {
-      text = (Math.round(elapsed / tHour) === 1) ? 'hour' : 'hours';
+      text = Math.round(elapsed / tHour) === 1 ? 'hour' : 'hours';
       return Math.round(elapsed / tHour) + ' ' + text;
     } else if (elapsed < tMonth) {
-      text = (Math.round(elapsed / tDay) === 1) ? 'day' : 'days';
+      text = Math.round(elapsed / tDay) === 1 ? 'day' : 'days';
       return 'approximately ' + Math.round(elapsed / tDay) + ' ' + text;
     } else if (elapsed < tYear) {
-      text = (Math.round(elapsed / tMonth) === 1) ? 'month' : 'months';
+      text = Math.round(elapsed / tMonth) === 1 ? 'month' : 'months';
       return 'approximately ' + Math.round(elapsed / tMonth) + ' ' + text;
     } else {
-      text = (Math.round(elapsed / tYear) === 1) ? 'year' : 'years';
+      text = Math.round(elapsed / tYear) === 1 ? 'year' : 'years';
       return 'approximately ' + Math.round(elapsed / tYear) + ' ' + text;
     }
-  },
-};
+  } };

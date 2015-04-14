@@ -36,7 +36,7 @@ export default {
   },
 
   getStorage: function (session) {
-    return (session) ? sessionStorage : localStorage;
+    return session ? sessionStorage : localStorage;
   }
 
 };

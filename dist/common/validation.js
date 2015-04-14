@@ -1,4 +1,7 @@
-export default {
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.default = {
 
   // Array of type tests
   types: ['undefined', 'null', 'number', 'boolean', 'string', 'array', 'object', 'function'],
@@ -61,3 +64,4 @@ export default {
   }
 
 };
+module.exports = exports.default;

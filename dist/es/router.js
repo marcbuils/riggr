@@ -22,14 +22,14 @@ Router.prototype.history = [];
 // Processes route change
 Router.prototype.process = function () {
   var self = this,
-    fragment = window.location.hash.replace('#', '').replace(/^\/|\/$/g, ''),
-    match,
-    route,
-    args,
-    prevRoute = false,
-    routeObj = [];
+      fragment = window.location.hash.replace('#', '').replace(/^\/|\/$/g, ''),
+      match,
+      route,
+      args,
+      prevRoute = false,
+      routeObj = [];
 
-  fragment = (fragment.substr(0) !== '/') ? '/' + fragment : fragment;
+  fragment = fragment.substr(0) !== '/' ? '/' + fragment : fragment;
 
   match = self.match();
   route = match.route;
@@ -86,21 +86,20 @@ Router.prototype.process = function () {
   } else if (routeObj) {
     processControllerRouting();
   }
-
 };
 
 // Matches routes and fires callback
 Router.prototype.match = function () {
   var self = this,
-    fragment = window.location.hash.replace('#', '').replace(/^\/|\/$/g, ''),
-    matcher,
-    route,
-    args = [],
-    matched = false,
-    i,
-    z;
+      fragment = window.location.hash.replace('#', '').replace(/^\/|\/$/g, ''),
+      matcher,
+      route,
+      args = [],
+      matched = false,
+      i,
+      z;
 
-  fragment = (fragment.substr(0) !== '/') ? '/' + fragment : fragment;
+  fragment = fragment.substr(0) !== '/' ? '/' + fragment : fragment;
 
   // Match root
   if (fragment === '/' && self.routes.hasOwnProperty('/')) {
@@ -141,7 +140,6 @@ Router.prototype.match = function () {
 
   // Return matched and arguments
   return matched;
-
 };
 
 // Method to reload (refresh) the route
@@ -160,10 +158,10 @@ Router.prototype.on = function (route, handler) {
     this.routes[route].unload = false;
   } else if (handler && typeof handler === 'object') {
     // Passed an object
-    this.routes[route].beforeAppRoute = (handler.beforeAppRoute) ? handler.beforeAppRoute : false;
-    this.routes[route].before = (handler.before) ? handler.before : false;
-    this.routes[route].load = (handler.load) ? handler.load : false;
-    this.routes[route].unload = (handler.unload) ? handler.unload : false;
+    this.routes[route].beforeAppRoute = handler.beforeAppRoute ? handler.beforeAppRoute : false;
+    this.routes[route].before = handler.before ? handler.before : false;
+    this.routes[route].load = handler.load ? handler.load : false;
+    this.routes[route].unload = handler.unload ? handler.unload : false;
   } else {
     throw 'Error creating route';
   }
@@ -172,9 +170,9 @@ Router.prototype.on = function (route, handler) {
 // Method for programatically navigating to route
 Router.prototype.go = function (path) {
   var location = window.location,
-    root = location.pathname.replace(/[^\/]$/, '$&'),
-    url,
-    self = this;
+      root = location.pathname.replace(/[^\/]$/, '$&'),
+      url,
+      self = this;
 
   // Handle url composition
   if (path.length) {
