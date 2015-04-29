@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git@github.com:Fluidbyte/Riggr.git"
   },
-  "main": "dist/es/riggr.js",
+  "main": "dist/common/riggr.js",
   "devDependencies": {
     "babel": "^5.1.9",
     "grunt": "^0.4.5",
