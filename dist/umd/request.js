@@ -37,7 +37,7 @@
       }
 
       // Process URL parameters
-      if (opts.url_params) {
+      if (opts && opts.url_params) {
         reqObj.url = request.processURLParams(reqObj.url, opts.url_params);
       }
 
