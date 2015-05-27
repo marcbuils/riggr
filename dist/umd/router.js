@@ -136,12 +136,9 @@
             route: route,
             args: args
           };
-          // Expose current route
-          self.current = route;
         }
       }
     }
-
     if (!matched) {
       if (self.routes.hasOwnProperty('/404')) {
         matched = {
@@ -150,7 +147,8 @@
         };
       }
     }
-
+    // Expose current route
+    self.current = route;
     // Return matched and arguments
     return matched;
   };

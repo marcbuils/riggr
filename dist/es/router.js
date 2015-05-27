@@ -123,12 +123,9 @@ Router.prototype.match = function () {
           route: route,
           args: args
         };
-        // Expose current route
-        self.current = route;
       }
     }
   }
-
   if (!matched) {
     if (self.routes.hasOwnProperty('/404')) {
       matched = {
@@ -137,7 +134,8 @@ Router.prototype.match = function () {
       };
     }
   }
-
+  // Expose current route
+  self.current = route;
   // Return matched and arguments
   return matched;
 };

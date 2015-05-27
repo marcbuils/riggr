@@ -124,12 +124,9 @@ define(['exports', 'module'], function (exports, module) {
             route: route,
             args: args
           };
-          // Expose current route
-          self.current = route;
         }
       }
     }
-
     if (!matched) {
       if (self.routes.hasOwnProperty('/404')) {
         matched = {
@@ -138,7 +135,8 @@ define(['exports', 'module'], function (exports, module) {
         };
       }
     }
-
+    // Expose current route
+    self.current = route;
     // Return matched and arguments
     return matched;
   };
