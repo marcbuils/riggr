@@ -138,7 +138,7 @@ Router.prototype.match = function () {
     }
   }
   // Expose current route
-  self.current = route;
+  self.current = matched.route;
   // Return matched and arguments
   return matched;
 };

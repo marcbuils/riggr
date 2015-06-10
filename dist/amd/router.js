@@ -136,7 +136,7 @@ define(['exports', 'module'], function (exports, module) {
       }
     }
     // Expose current route
-    self.current = route;
+    self.current = matched.route;
     // Return matched and arguments
     return matched;
   };
