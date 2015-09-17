@@ -141,16 +141,15 @@ define(['exports', 'module', 'knockout', 'jquery', 'observer', 'router'], functi
     // Unsubscribe all observables
     _ko.cleanNode(el);
 
-    //reset or create observables
     for (var obsName in vm.observables) {
       def = vm.observables[obsName];
-      if (def.reset === false && vm[obsName] !== void 0) {
+      if (def && def.reset === false && vm[obsName] !== void 0) {
         continue;
       }
-      isObservable = def.type || def.value !== void 0 ? true : false;
+      isObservable = def && def.type || def && def.value !== void 0 ? true : false;
       value = isObservable ? def.value : def;
       koType = _ko.observable;
-      if (def.type === 'array') {
+      if (def && def.type === 'array') {
         koType = _ko.observableArray;
         value = value && value.length ? JSON.parse(JSON.stringify(value)) : [];
       } else {

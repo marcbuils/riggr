@@ -152,16 +152,15 @@ var registerObservables = function (vm) {
   // Unsubscribe all observables
   _ko2.default.cleanNode(el);
 
-  //reset or create observables
   for (var obsName in vm.observables) {
     def = vm.observables[obsName];
-    if (def.reset === false && vm[obsName] !== void 0) {
+    if (def && def.reset === false && vm[obsName] !== void 0) {
       continue;
     }
-    isObservable = def.type || def.value !== void 0 ? true : false;
+    isObservable = def && def.type || def && def.value !== void 0 ? true : false;
     value = isObservable ? def.value : def;
     koType = _ko2.default.observable;
-    if (def.type === 'array') {
+    if (def && def.type === 'array') {
       koType = _ko2.default.observableArray;
       value = value && value.length ? JSON.parse(JSON.stringify(value)) : [];
     } else {
